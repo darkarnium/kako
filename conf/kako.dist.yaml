@@ -1,0 +1,11 @@
+---
+logging:
+  path: '/opt/kako/logs'
+
+simulation:
+  - 'mirai_cpeserver_soap'
+  - 'mirai_generic_telnet'
+
+storage:
+  region: 'us-west-2'
+  bucket: 'kako-samples'

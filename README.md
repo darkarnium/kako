@@ -1,0 +1,97 @@
+# Kako
+
+This project provides honeypots for a number of well known and deployed embedded device vulnerabilities. This project is intended for use in cataloging attack sources, droppers and payloads.
+
+The default configuration will run a given set of simulations and capture information relating to the origin of the requests, the body of the request, and attempt to process and collect the payload - if supported.
+
+## Disclaimer
+
+This code is so pre-alpha it hurts; expect problems! :fire:
+
+## Dependencies
+
+The following Python packages are required for Kako to function correctly:
+
+* `click` - Command-line argument processing.
+* `boto3` - Amazon AWS integration.
+* `requests` - HTTP request library.
+* `cerberus` - Validation of messages and other documents.
+
+Once these modules are installed, a valid configuration file is required. See the **Configuration** section for more information.
+
+## Configuration
+
+The configuration for Kako is performed via a YAML document - named `kako.yaml` by default. An example configuration ships with Kako and is named `kako.dist.yaml`.
+
+### AWS API
+
+Currently, Kako assumes that `boto3` is able to enumerate credentials to access the configured SNS and S3 resources without intervention. This may be via `~/.aws/credentials` file, IAM Instance Profiles (recommended), environment variables, or otherwise. This is done to encourage the use of IAM Instance Profiles, rather than generating AWS access keys and placing them into unencrypted text files.
+
+There is currently no ability to provide AWS access keys directly.
+
+## Simulations
+
+Simply put, simulations provide data light-weight 'emulation' of a given target. These simulations are loaded by Kako by instantiating a class from the given simulation file (always named `Simulation`), and run by calling the run method (always named `run`).
+
+### Sample
+
+The following simulation would simply start (if listed in the configuration) and write 'Ping' to the log every five seconds. This sample could be installed by following the "Installation" instructions in the next section.
+
+
+```python
+import logging
+
+from . import server
+from kako import constant
+
+
+class RequestHandler(server.HTTP.RequestHandler):
+    ''' Implements simulation specific logic. '''
+
+    def do_GET(self):
+        ''' Implements HTTP GET request routing. '''
+        if self.path.split('?')[0] == '/test':
+            self.capture()
+
+
+class Simulation(object):
+    ''' Simulation for an example HTTP service. '''
+
+    def __init__(self, configuration):
+        self.log = logging.getLogger()
+        self.port = 8080
+        self.configuration = configuration
+
+    def run(self):
+        ''' Implements the main runnable for the simulation. '''
+        self.log.info("Setting up listener on TCP/{}".format(self.port))
+        service = server.TCP.Server(
+            ('0.0.0.0', self.port),
+            RequestHandler,
+            self.configuration
+        )
+        service.serve_forever()
+```
+
+### Installation
+
+Installation and configuration of a new simulation can be performed in the following manner:
+
+1. Install required Python dependencies for the new module.
+2. Install / create the file into the `kako/simulation/` directory (eg. `noop_sample.py`).
+3. Add the module into `kako.simulation` as an import inside of `__init__` (eg. `from . import generic_http_sample`).
+4. Add the new module into the Kako configuration - under the `simulation` section.
+
+## FAQ
+
+### ...But why?
+
+This project was developed in response to receiving a number of packet captures from production networks being probed by machines attempting to exploit a number of IoT vulnerabilities en masse. Although the captures contained information about the method(s) of infection - such as HTTP requests - the payloads themselves were missing.
+
+As a result, a number of simulations were built and deployed into Amazon Web Services (AWS) in order to catalog and retrieve these payloads as well as document the associated origins and droppers for later analysis.
+
+## Additional Reading
+
+A basic Chef environment cookbook for deploying and configuring Kako can be found at the following URL:
+
+* https://www.github.com/darkarnium/kako-env/
