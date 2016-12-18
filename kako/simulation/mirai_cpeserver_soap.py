@@ -8,9 +8,11 @@ class RequestHandler(server.HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
 
     def do_POST(self):
-        ''' Implements HTTP POST request routing. '''
+        ''' Implement known CPEServer SOAP exploit routing. '''
         if self.path.split('?')[0] == '/UD/act':
-            self.capture()
+            length = int(self.headers.getheader('content-length', 0))
+            content = self.rfile.read(length)
+            self.capture(payload)
 
 
 class Simulation(object):

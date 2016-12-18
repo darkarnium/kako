@@ -33,45 +33,28 @@ There is currently no ability to provide AWS access keys directly.
 
 Simply put, simulations provide data light-weight 'emulation' of a given target. These simulations are loaded by Kako by instantiating a class from the given simulation file (always named `Simulation`), and run by calling the run method (always named `run`).
 
-### Sample
+The following simulations are currently included:
 
-The following simulation would simply start (if listed in the configuration) and write 'Ping' to the log every five seconds. This sample could be installed by following the "Installation" instructions in the next section.
+* Mirai - CPEServer SOAP
+  * Simulates a vulnerable CPEServer SOAP service (command injection).
+* Mirai - Generic Telnet
+  * Simulates a vulnerable telnet service (default credentials).
 
+## Servers
 
-```python
-import logging
+In order to simplify implementation of a new simulation, a number of servers are included. These servers implement the minimum required functionality to bind sockets, accept connections and read / write to the client.
 
-from . import server
-from kako import constant
+The following servers are currently included:
 
+* Telnet
+  * Accepts any username / password pair for login.
+  * Simulates a `BusyBox` telnet service with basis shell commands.
+  * Records full interaction on disconnect / exit - via `capture()`.
+* HTTP
+  * Simulates a `uhttpd` HTTP service with no routes.
+  * Records request on server response - via `capture()`.
 
-class RequestHandler(server.HTTP.RequestHandler):
-    ''' Implements simulation specific logic. '''
-
-    def do_GET(self):
-        ''' Implements HTTP GET request routing. '''
-        if self.path.split('?')[0] == '/test':
-            self.capture()
-
-
-class Simulation(object):
-    ''' Simulation for an example HTTP service. '''
-
-    def __init__(self, configuration):
-        self.log = logging.getLogger()
-        self.port = 8080
-        self.configuration = configuration
-
-    def run(self):
-        ''' Implements the main runnable for the simulation. '''
-        self.log.info("Setting up listener on TCP/{}".format(self.port))
-        service = server.TCP.Server(
-            ('0.0.0.0', self.port),
-            RequestHandler,
-            self.configuration
-        )
-        service.serve_forever()
-```
+The above servers can be easily extended to implement required functionality for the given vulnerable service. The two example simulations, discussed above in the `Simulations`, provide examples of how to extend the base classes to implement the required functionality.
 
 ### Installation
 
