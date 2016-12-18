@@ -29,12 +29,10 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         return True
 
     def do_404(self):
-        ''' Implements generic 404 responses. '''
+        ''' Implements a generic 404 response. '''
         self.send_response(404)
-        self.send_header("Content-type", "text/html")
+        self.send_header('Content-type', 'text/plain')
         self.end_headers()
-
-        # Write body.
         self.wfile.write('No such file or directory')
         self.wfile.close()
 
