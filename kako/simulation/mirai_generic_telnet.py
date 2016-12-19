@@ -9,7 +9,7 @@ class RequestHandler(server.Telnet.RequestHandler):
 
     def do_cmd(self, cmd):
         ''' Implement known Merai telnet routing. '''
-        # If all else fails, call the base implementation, which handles a
+        # If all else fails, call the base implementation which handles a
         # number of generic cases (including help and 'command not found').
         server.Telnet.RequestHandler.do_cmd(self, cmd)
 

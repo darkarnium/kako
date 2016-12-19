@@ -10,9 +10,12 @@ class RequestHandler(server.HTTP.RequestHandler):
     def do_POST(self):
         ''' Implement known CPEServer SOAP exploit routing. '''
         if self.path.split('?')[0] == '/UD/act':
-            length = int(self.headers.getheader('content-length', 0))
-            content = self.rfile.read(length)
-            self.capture(payload)
+            self.capture(
+                self.rfile.read(
+                    int(self.headers.getheader('content-length', 0))
+                )
+            )
+            self.send_response(200, '')
 
 
 class Simulation(object):
