@@ -48,7 +48,7 @@ The following servers are currently included:
 
 * Telnet
   * Accepts any username / password pair for login.
-  * Simulates a `BusyBox` telnet service with basis shell commands.
+  * Simulates a `BusyBox` telnet service with basic shell commands.
   * Records full interaction on disconnect / exit - via `capture()`.
 * HTTP
   * Simulates a `uhttpd` HTTP service with no routes.
@@ -61,7 +61,7 @@ The above servers can be easily extended to implement required functionality for
 Installation and configuration of a new simulation can be performed in the following manner:
 
 1. Install required Python dependencies for the new module.
-2. Install / create the file into the `kako/simulation/` directory (eg. `noop_sample.py`).
+2. Install / create the file into the `kako/simulation/` directory (eg. `generic_http_sample.py`).
 3. Add the module into `kako.simulation` as an import inside of `__init__` (eg. `from . import generic_http_sample`).
 4. Add the new module into the Kako configuration - under the `simulation` section.
 

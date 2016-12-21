@@ -1,8 +1,8 @@
 import logging
-import pprint
 import SocketServer
 
-from . import Error
+from kako import messaging
+from kako.simulation.server import Error
 
 
 class RequestHandler(SocketServer.BaseRequestHandler):
@@ -33,7 +33,13 @@ class RequestHandler(SocketServer.BaseRequestHandler):
 
     def capture(self):
         ''' Implements 'capture' functionality for identified requests. '''
-        self.log.info(self.record)
+        msg = messaging.capture.Capture(
+            capture=self.record,
+            source_ip=self.client_address[0],
+            source_port=self.client_address[1],
+            simulation='x'
+        )
+        self.log.info(msg.toJSON())
         return True
 
 

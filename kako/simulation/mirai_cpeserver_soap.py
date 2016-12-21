@@ -1,7 +1,7 @@
 import logging
 
-from . import server
 from kako import constant
+from kako.simulation import server
 
 
 class RequestHandler(server.HTTP.RequestHandler):

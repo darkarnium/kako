@@ -6,6 +6,6 @@ simulation:
   - 'mirai_cpeserver_soap'
   - 'mirai_generic_telnet'
 
-storage:
+results:
   region: 'us-west-2'
-  bucket: 'kako-samples'
+  topic: ''

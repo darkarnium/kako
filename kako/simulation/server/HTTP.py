@@ -2,6 +2,8 @@ import logging
 import SocketServer
 import SimpleHTTPServer
 
+from kako import messaging
+
 
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     ''' Implements HTTP handling for client connections. '''
@@ -55,3 +57,12 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         request.append(self.raw_requestline.rstrip())
         request.append(self.headers)
         request.append(payload)
+
+        msg = messaging.capture.Capture(
+            capture=request,
+            source_ip=self.client_address[0],
+            source_port=self.client_address[1],
+            simulation='x'
+        )
+        self.log.info(msg.toJSON())
+        return True

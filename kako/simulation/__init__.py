@@ -1,2 +1,3 @@
-from . import mirai_generic_telnet
-from . import mirai_cpeserver_soap
+from kako.simulation import server
+from kako.simulation import mirai_generic_telnet
+from kako.simulation import mirai_cpeserver_soap

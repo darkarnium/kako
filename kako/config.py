@@ -11,11 +11,11 @@ SCHEMA = {
     'simulation': {
         'type': 'list'
     },
-    'storage': {
+    'results': {
         'type': 'dict',
         'schema': {
             'region': {'type': 'string'},
-            'bucket': {'type': 'string'}
+            'topic': {'type': 'string'}
         }
     }
 }

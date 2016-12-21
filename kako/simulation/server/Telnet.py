@@ -2,8 +2,8 @@ import logging
 import pprint
 import SocketServer
 
-from . import TCP
-from . import Error
+from kako.simulation.server import TCP
+from kako.simulation.server import Error
 
 
 class RequestHandler(TCP.RequestHandler):
@@ -74,7 +74,7 @@ class RequestHandler(TCP.RequestHandler):
             ':'.join(str(x) for x in self.client_address)
         ))
 
-        # Negociate with the client, and handle initial login / banner.
+        # Negotiate with the client, and handle initial login / banner.
         try:
             self.do_iacs()
             self.do_login()

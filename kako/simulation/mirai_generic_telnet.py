@@ -1,14 +1,14 @@
 import logging
 
-from . import server
 from kako import constant
+from kako.simulation import server
 
 
 class RequestHandler(server.Telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
 
     def do_cmd(self, cmd):
-        ''' Implement known Merai telnet routing. '''
+        ''' Implement known Mirai telnet routing. '''
         # If all else fails, call the base implementation which handles a
         # number of generic cases (including help and 'command not found').
         server.Telnet.RequestHandler.do_cmd(self, cmd)
