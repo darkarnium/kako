@@ -71,7 +71,7 @@ Installation and configuration of a new simulation can be performed in the follo
 
 This project was developed in response to receiving a number of packet captures from production networks being probed by machines attempting to exploit a number of IoT vulnerabilities en masse. Although the captures contained information about the method(s) of infection - such as HTTP requests - the payloads themselves were missing.
 
-As a result, a number of simulations were built and deployed into Amazon Web Services (AWS) in order to catalog and retrieve these payloads as well as document the associated origins and droppers for later analysis.
+As a result a number of simulations were built and deployed into Amazon Web Services (AWS) in order to catalog and retrieve these payloads as well as document the associated origins and droppers for later analysis.
 
 ## Additional Reading
 

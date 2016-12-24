@@ -3,7 +3,7 @@ import logging
 import SocketServer
 
 from kako import messaging
-from kako.simulation.server import Error
+from kako.simulation.server import error
 
 
 class RequestHandler(SocketServer.BaseRequestHandler):
@@ -28,7 +28,7 @@ class RequestHandler(SocketServer.BaseRequestHandler):
         ''' Reads from the socket into the record and build a byte-array. '''
         raw = self.request.recv(length)
         if raw == '':
-            raise Error.ClientDisconnect()
+            raise error.ClientDisconnect()
 
         self.record.append(raw)
         self.buffer = map(ord, list(raw))

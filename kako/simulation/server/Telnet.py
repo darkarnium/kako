@@ -3,7 +3,8 @@ import pprint
 import SocketServer
 
 from kako.simulation.server import TCP
-from kako.simulation.server import Error
+from kako.simulation.server import error
+from kako.simulation.system import linux
 
 
 class RequestHandler(TCP.RequestHandler):
@@ -11,28 +12,11 @@ class RequestHandler(TCP.RequestHandler):
 
     def __init__(self, request, client_address, server):
         ''' Setup versions and system names for this service. '''
-        self.system = 'default'
-        self.version = 'BusyBox v1.19.3 (2013-11-01 10:10:26 CST)'
         self.prompt = '#'
+        self.hostname = 'default'
+        self.interpreter = linux.CommandInterpreter()
 
         TCP.RequestHandler.__init__(self, request, client_address, server)
-
-    def do_cmd(self, cmd):
-        ''' Perform actions based on input command. '''
-        if cmd in ['busybox', '/bin/busybox', 'help']:
-            self.write("{} multi-call binary.\r\n".format(self.version))
-            return
-
-        if cmd.startswith('/bin/busybox ') or cmd.startswith('busybox '):
-            applet = cmd.split(' ')[1]
-            self.write("{}: applet not found\r\n".format(applet))
-            return
-
-        if cmd in ['exit', 'quit', 'logout']:
-            raise Error.ClientCommandExit()
-
-        # If all else fails, raise a 'command not found'.
-        raise Error.ClientCommandNotFound()
 
     def do_iacs(self):
         ''' Sends Telnet negotiation messages to the client (IAC). '''
@@ -57,16 +41,14 @@ class RequestHandler(TCP.RequestHandler):
 
     def do_login(self):
         ''' Simulates a login prompt and captures the credentials. '''
-        self.write('{} login: '.format(self.system))
+        self.write('{} login: '.format(self.hostname))
         self.read(1024)
-        self.write('Password: '.format(self.system))
+        self.write('Password: ')
         self.read(1024)
 
     def do_banner(self):
-        ''' Simulates a login banner. '''
+        ''' Simulates an MOTD style banner (after login). '''
         self.write("\r\n")
-        self.write('{} built-in shell (ash)\r\n'.format(self.version))
-        self.write("Enter 'help' for a list of built-in commands.\r\n\r\n")
 
     def handle(self):
         ''' Extend TCP RequestHandler to implement a fake telnet service. '''
@@ -79,7 +61,7 @@ class RequestHandler(TCP.RequestHandler):
             self.do_iacs()
             self.do_login()
             self.do_banner()
-        except Error.ClientDisconnect as e:
+        except error.ClientDisconnect as e:
             self.capture()
             self.log.info('Client force disconnected.')
             return
@@ -90,17 +72,15 @@ class RequestHandler(TCP.RequestHandler):
             self.write('{} '.format(self.prompt.rstrip()))
             try:
                 self.read(1024)
-            except Error.ClientDisconnect as e:
+            except error.ClientDisconnect as e:
                 self.log.info('Client force disconnected!')
                 break
 
-            # Read command from buffer and action accordingly.
+            # Convert read byte array into a string and process.
             cmd = ''.join(map(chr, self.buffer)).strip()
             try:
-                self.do_cmd(cmd)
-            except Error.ClientCommandNotFound as e:
-                self.write("-sh: {}: command not found\r\n".format(cmd))
-            except Error.ClientCommandExit as e:
+                self.write(self.interpreter.handle(cmd))
+            except error.ClientCommandExit as e:
                 break
 
         # Record the interaction.
