@@ -1,10 +1,11 @@
 import logging
 
 from kako import constant
-from kako.simulation import server
+from kako.simulation.server import TCP
+from kako.simulation.server import HTTP
 
 
-class RequestHandler(server.HTTP.RequestHandler):
+class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_cpeserver_soap'
 
@@ -30,7 +31,7 @@ class Simulation(object):
     def run(self):
         ''' Implements the main runable for the simulation. '''
         self.log.info("Setting up listener on TCP/{}".format(self.port))
-        service = server.TCP.Server(
+        service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,
             self.configuration
