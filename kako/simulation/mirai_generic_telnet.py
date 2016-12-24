@@ -6,6 +6,7 @@ from kako.simulation import server
 
 class RequestHandler(server.Telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
+    simulation = 'mirai_generic_telnet'
 
     def do_cmd(self, cmd):
         ''' Implement known Mirai telnet routing. '''

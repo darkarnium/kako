@@ -1,3 +1,4 @@
+import socket
 import logging
 import SocketServer
 
@@ -7,6 +8,7 @@ from kako.simulation.server import Error
 
 class RequestHandler(SocketServer.BaseRequestHandler):
     ''' Implements TCP handling for client connections. '''
+    simulation = 'UNKNOWN'
 
     def __init__(self, request, client_address, server):
         ''' Bolt on a logger to push messages back to Kako. '''
@@ -34,10 +36,11 @@ class RequestHandler(SocketServer.BaseRequestHandler):
     def capture(self):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
+            node=socket.gethostname(),
             capture=self.record,
             source_ip=self.client_address[0],
             source_port=self.client_address[1],
-            simulation='x'
+            simulation=self.simulation
         )
         self.log.info(msg.toJSON())
         return True
