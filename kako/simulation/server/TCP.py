@@ -1,3 +1,4 @@
+import boto3
 import socket
 import logging
 import SocketServer
@@ -13,6 +14,7 @@ class RequestHandler(SocketServer.BaseRequestHandler):
     def __init__(self, request, client_address, server):
         ''' Bolt on a logger to push messages back to Kako. '''
         self.log = logging.getLogger()
+        self.sns = boto3.client('sns')
         self.buffer = []
         self.record = []
 
@@ -42,8 +44,13 @@ class RequestHandler(SocketServer.BaseRequestHandler):
             source_port=self.client_address[1],
             simulation=self.simulation
         )
-        self.log.info(msg.toJSON())
-        return True
+
+        # Publish to SNS.
+        self.log.info('Publishing results from interaction to SNS.')
+        self.sns.publish(
+            TopicArn=self.server.configuration['results']['topic'],
+            Message=msg.toJSON()
+        )
 
 
 class Server(SocketServer.ThreadingTCPServer):

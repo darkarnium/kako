@@ -1,4 +1,4 @@
-import pprint
+import re
 
 from kako.simulation.server import error
 
@@ -44,7 +44,7 @@ class CommandInterpreter(object):
 
     def handle(self, command):
         ''' Dispatches the input command to the relevant handler. '''
-        args = command.split(' ')  # TODO: Regex for one or more space(s).
+        args = re.split('\s+', command)
         if len(args) < 1:
             return
 
