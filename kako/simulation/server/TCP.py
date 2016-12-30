@@ -14,10 +14,15 @@ class RequestHandler(SocketServer.BaseRequestHandler):
     def __init__(self, request, client_address, server):
         ''' Bolt on a logger to push messages back to Kako. '''
         self.log = logging.getLogger()
-        self.sns = boto3.client('sns')
         self.buffer = []
         self.record = []
 
+        # Setup an AWS SNS client for publishing captures.
+        self.sns = boto3.client(
+            'sns', region_name=self.server.configuration['results']['region']
+        )
+
+        # Finish initialization using the parent class.
         SocketServer.BaseRequestHandler.__init__(
             self, request, client_address, server
         )
