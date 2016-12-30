@@ -18,7 +18,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         # Setup an AWS SNS client for publishing captures.
         self.sns = boto3.client(
-            'sns', region_name=self.server.configuration['results']['region']
+            'sns', region_name=server.configuration['results']['region']
         )
 
         # Finish initialization using the parent class.
