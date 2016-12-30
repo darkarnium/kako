@@ -9,6 +9,10 @@ from kako.simulation.system import linux
 class CommandInterpreter(linux.CommandInterpreter):
     ''' Implements Mirai specific command interpretation. '''
 
+    def do_MIRAI(self, args=[]):
+        ''' Ensure Mirai scanners recieve the correct response. '''
+        return 'MIRAI: applet not found\r\n'
+
     def do_wget(self, args=[]):
         ''' Implement `wget` stub. '''
         return
