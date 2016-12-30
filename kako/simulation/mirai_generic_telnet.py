@@ -50,6 +50,7 @@ class CommandInterpreter(linux.CommandInterpreter):
 class RequestHandler(telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_generic_telnet'
+    simulation_version = '0.1.0'
 
     def __init__(self, request, client_address, server):
         ''' Override the default telnet server injecting a custom interpreter. '''

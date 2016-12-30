@@ -72,7 +72,8 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             capture=request,
             source_ip=self.client_address[0],
             source_port=self.client_address[1],
-            simulation=self.simulation
+            simulation=self.simulation,
+            simulation_version=self.simulation_version
         )
 
         # Publish to SNS.

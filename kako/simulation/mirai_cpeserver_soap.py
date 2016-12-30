@@ -8,6 +8,7 @@ from kako.simulation.server import HTTP
 class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_cpeserver_soap'
+    simulation_version = '0.1.0'
 
     def do_POST(self):
         ''' Implement known CPEServer SOAP exploit routing. '''
