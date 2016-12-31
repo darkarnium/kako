@@ -69,11 +69,11 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         msg = messaging.capture.Capture(
             node=socket.gethostname(),
-            capture=request,
-            source_ip=self.client_address[0],
-            source_port=self.client_address[1],
-            simulation=self.simulation,
-            simulation_version=self.simulation_version
+            cap=self.record,
+            src_ip=self.client_address[0],
+            src_port=self.client_address[1],
+            sim_name=self.simulation,
+            sim_version=self.simulation_version
         )
 
         # Publish to SNS.
