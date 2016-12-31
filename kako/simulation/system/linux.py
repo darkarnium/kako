@@ -10,7 +10,12 @@ class CommandInterpreter(object):
     def do_busybox(self, args=[]):
         ''' Wrapper the handle() method to handle BusyBox applets. '''
         if len(args) > 0:
-            return self.handle(' '.join(args))
+            result = self.handle(' '.join(args))
+            # TODO: Fix this hack.
+            if re.match('^sh:\s', result):
+                return '{}: applet not found'.format(args[0])
+            else:
+                return result
         else:
             return self.version
 

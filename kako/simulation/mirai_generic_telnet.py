@@ -9,14 +9,6 @@ from kako.simulation.system import linux
 class CommandInterpreter(linux.CommandInterpreter):
     ''' Implements Mirai specific command interpretation. '''
 
-    def do_MIRAI(self, args=[]):
-        ''' Ensure 'Mirai' scanners recieve the correct response. '''
-        return 'MIRAI: applet not found\r\n'
-
-    def do_MM(self, args=[]):
-        ''' Ensure 'MM'' scanners recieve the correct response. '''
-        return 'MM: applet not found\r\n'
-
     def do_wget(self, args=[]):
         ''' Implement `wget` stub. '''
         return
@@ -54,7 +46,7 @@ class CommandInterpreter(linux.CommandInterpreter):
 class RequestHandler(telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_generic_telnet'
-    simulation_version = '0.1.1'
+    simulation_version = '0.2.0'
 
     def __init__(self, request, client_address, server):
         ''' Override the default telnet server injecting a custom interpreter. '''

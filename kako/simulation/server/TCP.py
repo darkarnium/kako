@@ -41,7 +41,7 @@ class RequestHandler(SocketServer.BaseRequestHandler):
         # If requested, save the read data into the record buffer, and stuff
         # it into the read buffer eitherway.
         if record:
-            self.record.append(raw)
+            self.record.append(raw.strip())
         self.buffer = map(ord, list(raw))
 
     def capture(self):
