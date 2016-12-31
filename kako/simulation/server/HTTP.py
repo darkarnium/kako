@@ -71,7 +71,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         msg = messaging.capture.Capture(
             ts=int(time.time()),
             node=socket.gethostname(),
-            cap=self.record,
+            cap=request,
             src_ip=self.client_address[0],
             src_port=self.client_address[1],
             sim_name=self.simulation,
