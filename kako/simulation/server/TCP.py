@@ -1,3 +1,4 @@
+import time
 import boto3
 import socket
 import logging
@@ -43,6 +44,7 @@ class RequestHandler(SocketServer.BaseRequestHandler):
     def capture(self):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
+            ts=int(time.time()),
             node=socket.gethostname(),
             cap=self.record,
             src_ip=self.client_address[0],

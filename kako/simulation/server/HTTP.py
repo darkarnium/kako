@@ -1,3 +1,4 @@
+import time
 import boto3
 import socket
 import logging
@@ -68,6 +69,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         request.append(payload)
 
         msg = messaging.capture.Capture(
+            ts=int(time.time()),
             node=socket.gethostname(),
             cap=self.record,
             src_ip=self.client_address[0],
