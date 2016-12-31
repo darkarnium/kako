@@ -32,13 +32,16 @@ class RequestHandler(SocketServer.BaseRequestHandler):
         ''' Writes to the socket. '''
         self.request.sendall(message)
 
-    def read(self, length):
+    def read(self, length, record=True):
         ''' Reads from the socket into the record and build a byte-array. '''
         raw = self.request.recv(length)
         if raw == '':
             raise error.ClientDisconnect()
 
-        self.record.append(raw)
+        # If requested, save the read data into the record buffer, and stuff
+        # it into the read buffer eitherway.
+        if record:
+            self.record.append(raw)
         self.buffer = map(ord, list(raw))
 
     def capture(self):

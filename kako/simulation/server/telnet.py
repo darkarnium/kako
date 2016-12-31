@@ -29,15 +29,16 @@ class RequestHandler(TCP.RequestHandler):
 
         # A response per sent IAC / parameter should be received from client.
         while True:
-            self.read(3)
+            self.read(3, record=False)
             if self.buffer[0] != 255:
                 break
 
             # Sub-negotiation isn't 3-bytes, so read until EoSP (0xF0)
-            if self.buffer[1] == 250:
-                while self.buffer[0] != 240:
-                    self.read(1)
-                break
+            if len(self.buffer) > 2:
+                if self.buffer[1] == 250:
+                    while self.buffer[0] != 240:
+                        self.read(1, record=False)
+                    break
 
     def do_login(self):
         ''' Simulates a login prompt and captures the credentials. '''
