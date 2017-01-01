@@ -11,6 +11,8 @@ from kako import messaging
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     ''' Implements HTTP handling for client connections. '''
     simulation = 'UNKNOWN'
+    vulnerability = 'UNKNOWN'
+    simulation_version = 'UNKNOWN'
 
     def __init__(self, request, client_address, server):
         ''' Bolt on a logger to push messages back to Kako. '''
@@ -70,8 +72,9 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
         msg = messaging.capture.Capture(
             ts=int(time.time()),
-            node=socket.gethostname(),
             cap=request,
+            vuln=self.vulnerability,
+            node=socket.gethostname(),
             src_ip=self.client_address[0],
             src_port=self.client_address[1],
             sim_name=self.simulation,

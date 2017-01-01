@@ -11,6 +11,8 @@ from kako.simulation.server import error
 class RequestHandler(SocketServer.BaseRequestHandler):
     ''' Implements TCP handling for client connections. '''
     simulation = 'UNKNOWN'
+    vulnerability = 'UNKNOWN'
+    simulation_version = 'UNKNOWN'
 
     def __init__(self, request, client_address, server):
         ''' Bolt on a logger to push messages back to Kako. '''
@@ -48,8 +50,9 @@ class RequestHandler(SocketServer.BaseRequestHandler):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
             ts=int(time.time()),
-            node=socket.gethostname(),
             cap=self.record,
+            vuln=self.vulnerability,
+            node=socket.gethostname(),
             src_ip=self.client_address[0],
             src_port=self.client_address[1],
             sim_name=self.simulation,

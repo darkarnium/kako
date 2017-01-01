@@ -5,6 +5,7 @@ logging:
 simulation:
   - 'mirai_cpeserver_soap'
   - 'mirai_generic_telnet'
+  - 'unknown_generic_http'
 
 results:
   region: 'us-west-2'

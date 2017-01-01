@@ -8,10 +8,11 @@ from kako.simulation.server import HTTP
 class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_cpeserver_soap'
-    simulation_version = '0.2.0'
+    vulnerability = 'Generic - TR-069 SOAP remote code execution'
+    simulation_version = '0.2.1'
 
     def do_POST(self):
-        ''' Implement known CPEServer SOAP exploit routing. '''
+        ''' Implement known SOAP exploit routing. '''
         if self.path.split('?')[0] == '/UD/act':
             self.capture(
                 self.rfile.read(

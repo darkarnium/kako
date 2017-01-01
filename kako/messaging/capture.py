@@ -5,10 +5,11 @@ import base64
 class Capture(object):
     ''' Defines a capture message for submission of results from Kako. '''
 
-    def __init__(self, src_ip, src_port, sim_name, cap, node, sim_version, ts):
+    def __init__(self, src_ip, src_port, sim_name, cap, node, sim_version, ts, vuln):
         ''' Generates an object for this capture. '''
         self.ts = ts
         self.cap = base64.b64encode('\r\n'.join(str(x) for x in cap))
+        self.vuln = vuln
         self.node = node
         self.src_ip = src_ip
         self.src_port = src_port

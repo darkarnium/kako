@@ -46,7 +46,8 @@ class CommandInterpreter(linux.CommandInterpreter):
 class RequestHandler(telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
     simulation = 'mirai_generic_telnet'
-    simulation_version = '0.2.0'
+    vulnerability = 'Generic - Default Credentials'
+    simulation_version = '0.2.1'
 
     def __init__(self, request, client_address, server):
         ''' Override the default telnet server injecting a custom interpreter. '''
