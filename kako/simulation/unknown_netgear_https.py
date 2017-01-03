@@ -1,3 +1,5 @@
+import os
+import ssl
 import logging
 
 from kako import constant
@@ -7,21 +9,11 @@ from kako.simulation.server import HTTP
 
 class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
-    simulation = 'unknown_generic_http'
+    simulation = 'unknown_netgear_https'
     simulation_version = '0.1.0'
 
     def do_POST(self):
         ''' Implement known exploit routing using HTTP POST. '''
-        # Generic D-Link (at al.) HNAP1 vulnerabilities.
-        if self.path.split('?')[0] == '/HNAP1':
-            self.vulnerability = 'D-Link - HNAP1 multiple vulnerabilities'
-            self.capture(
-                self.rfile.read(
-                    int(self.headers.getheader('content-length', 0))
-                )
-            )
-            self.send_response(200, '')
-
         # NetGear authentication bypass vulnerabilities.
         if self.path.split('?')[0] == '/apply_noauth.cgi':
             self.vulnerability = 'NetGear - apply_noauth authentication bypass'
@@ -49,6 +41,13 @@ class RequestHandler(HTTP.RequestHandler):
             self.vulnerability = 'NetGear - BRS authentication bypass'
             self.capture('')
             self.send_response(200, '')
+            return
+
+        # For everything else, return an HTTP 401.
+        self.vulnerability = 'NetGear - HTTPS access attempt'
+        self.capture('')
+        self.send_response(401, 'Unauthorized')
+        self.send_header('WWW-Authenticate', 'Basic realm="NETGEAR R7000"')
 
 
 class Simulation(object):
@@ -56,7 +55,7 @@ class Simulation(object):
 
     def __init__(self, configuration):
         self.log = logging.getLogger()
-        self.port = 8080
+        self.port = 8443
         self.configuration = configuration
 
     def run(self):
@@ -66,5 +65,20 @@ class Simulation(object):
             ('0.0.0.0', self.port),
             RequestHandler,
             self.configuration
+        )
+
+        # TODO: Put this in configuration.
+        certfile = os.path.join(
+            os.path.dirname(os.path.realpath(__file__)),
+            '../../',
+            'conf/routerlogin.pem'
+        )
+
+        # Wrapper the HTTP socket with SSL.
+        self.log.info("Enabling SSL with certificate from {}".format(certfile))
+        service.socket = ssl.wrap_socket(
+            service.socket,
+            certfile=certfile,
+            server_side=True
         )
         service.serve_forever()

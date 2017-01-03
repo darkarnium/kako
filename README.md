@@ -39,6 +39,10 @@ The following simulations are currently included:
   * Simulates a vulnerable CPEServer SOAP service (command injection).
 * Mirai - Generic Telnet
   * Simulates a vulnerable telnet service (default credentials).
+* Unknown - D-Link HTTP
+  * Simulates a vulnerable D-Link router HTTP web interface.
+* Unknown - NetGear HTTPS
+  * Simulates a vulnerable NetGear router HTTPS web interface.
 
 ## Servers
 
@@ -53,6 +57,7 @@ The following servers are currently included:
 * HTTP
   * Simulates a `uhttpd` HTTP service with no routes.
   * Records request on server response - via `capture()`.
+  * This can be turned into an SSL listener though use of `ssl.wrap_socket()`.
 
 The above servers can be easily extended to implement required functionality for the given vulnerable service. The two example simulations, discussed above in the `Simulations`, provide examples of how to extend the base classes to implement the required functionality.
 
@@ -64,6 +69,18 @@ Installation and configuration of a new simulation can be performed in the follo
 2. Install / create the file into the `kako/simulation/` directory (eg. `generic_http_sample.py`).
 3. Add the module into `kako.simulation` as an import inside of `__init__` (eg. `from . import generic_http_sample`).
 4. Add the new module into the Kako configuration - under the `simulation` section.
+
+### SSL
+
+For services that require SSL, such as NetGear remote management simulations, an SSL certificate is required. These can easily be generated with the following command:
+
+```
+# Windows.
+openssl req -new -subj '//C=US\ST=California\L=San Jose\O=NETGEAR\OU=Home Consumer Products\CN=www.routerlogin.net' -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
+
+# *Nix.
+openssl req -new -subj '/C=US/ST=California/L=San Jose/O=NETGEAR/OU=Home Consumer Products/CN=www.routerlogin.net' -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
+```
 
 ## FAQ
 
