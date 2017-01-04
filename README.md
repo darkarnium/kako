@@ -43,6 +43,8 @@ The following simulations are currently included:
   * Simulates a vulnerable D-Link router HTTP web interface.
 * Unknown - NetGear HTTPS
   * Simulates a vulnerable NetGear router HTTPS web interface.
+* Unknown - Unknown RomPager
+  * Simulates a vulnerable router RomPager HTTP interface.
 
 ## Servers
 

@@ -7,6 +7,7 @@ simulation:
   - 'mirai_generic_telnet'
   - 'unknown_dlink_http'
   - 'unknown_netgear_https'
+  - 'unknown_unknown_rompager'
 
 results:
   region: 'us-west-2'
