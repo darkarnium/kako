@@ -16,6 +16,18 @@ class RequestHandler(HTTP.RequestHandler):
 
     def do_POST(self):
         ''' Implement known exploit routing using HTTP POST. '''
+        # Generic D-Link command injection ('610ocker').
+        if self.path.split('?')[0] == '/command.php':
+            self.vulnerability = 'D-Link - command.php remote code execution'
+            self.capture(
+                self.rfile.read(
+                    int(self.headers.getheader('content-length', 0))
+                )
+            )
+            self.send_response(200, 'OK')
+            self.end_headers()
+            self.wfile.write('610cker')
+
         # Generic D-Link (et al.) HNAP1 vulnerabilities.
         if self.path.split('?')[0] == '/HNAP1':
             self.vulnerability = 'D-Link - HNAP1 multiple vulnerabilities'
@@ -24,10 +36,22 @@ class RequestHandler(HTTP.RequestHandler):
                     int(self.headers.getheader('content-length', 0))
                 )
             )
-            self.send_response(200, '')
+            self.send_response(200, 'OK')
 
     def do_GET(self):
         ''' Implement known exploit routing using HTTP GET. '''
+        if self.path.split('?')[0].startswith('/language/'):
+            self.vulnerability = 'D-Link - Language remote code execution'
+            self.capture(
+                self.rfile.read(
+                    int(self.headers.getheader('content-length', 0))
+                )
+            )
+            self.send_response(200, 'OK')
+            self.end_headers()
+            self.wfile.write('610cker')
+            return
+
         # For everything else, return an HTTP 401.
         self.vulnerability = 'D-Link - HTTP access attempt'
         self.capture('')
