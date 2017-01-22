@@ -14,7 +14,7 @@ from kako import constant
 from kako import simulation
 
 
-def run_simulation(simulation=None):
+def run_simulation(name=None):
     ''' Attempts to run the given simulation, returning the process. '''
     executor = getattr(simulation, name).Simulation(configuration)
     process = multiprocessing.Process(target=executor.run)
