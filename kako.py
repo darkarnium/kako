@@ -14,7 +14,7 @@ from kako import constant
 from kako import simulation
 
 
-def run_simulation(name=None):
+def run_simulation(name=None, configuration=None):
     ''' Attempts to run the given simulation, returning the process. '''
     executor = getattr(simulation, name).Simulation(configuration)
     process = multiprocessing.Process(target=executor.run)
@@ -56,7 +56,7 @@ def main(configuration_file):
     for name in configuration['simulation']:
         log.info('Loading simulation: {}'.format(name))
         try:
-            running[name] = run_simulation(name)
+            running[name] = run_simulation(name, configuration)
         except AttributeError as x:
             log.error('Unable to load simulation {}: {}'.format(name, x))
             continue
@@ -73,7 +73,7 @@ def main(configuration_file):
                 if not simulation.is_alive():
                     try:
                         log.error('{} died, respawning'.format(name))
-                        running[name] = run_simulation(name)
+                        running[name] = run_simulation(name, configuration)
                     except AttributeError as x:
                         log.error('Unable to load simulation {}: {}'.format(
                             name, x
