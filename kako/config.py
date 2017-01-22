@@ -8,6 +8,13 @@ SCHEMA = {
             'path': {'type': 'string'}
         }
     },
+    'monitoring': {
+        'type': 'dict',
+        'schema': {
+            'enabled': {'type': 'boolean'},
+            'interval': {'type': 'integer'}
+        }
+    },
     'simulation': {
         'type': 'list'
     },

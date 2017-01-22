@@ -12,3 +12,7 @@ simulation:
 results:
   region: 'us-west-2'
   topic: ''
+
+monitoring:
+  enabled: True
+  interval: 60

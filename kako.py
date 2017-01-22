@@ -1,6 +1,7 @@
 #!/usr/bin/env python2.7
 
 import os
+import time
 import yaml
 import click
 import logging
@@ -11,6 +12,14 @@ import multiprocessing
 from kako import config
 from kako import constant
 from kako import simulation
+
+
+def run_simulation(simulation=None):
+    ''' Attempts to run the given simulation, returning the process. '''
+    executor = getattr(simulation, name).Simulation(configuration)
+    process = multiprocessing.Process(target=executor.run)
+    process.start()
+    return process
 
 
 @click.command()
@@ -43,18 +52,36 @@ def main(configuration_file):
 
     # Attempt to load the configured simulation, and run it.
     log = logging.getLogger()
-
+    running = {}
     for name in configuration['simulation']:
         log.info('Loading simulation: {}'.format(name))
         try:
-            executor = getattr(simulation, name).Simulation(configuration)
+            running[name] = run_simulation(name)
         except AttributeError as x:
             log.error('Unable to load simulation {}: {}'.format(name, x))
             continue
 
-        process = multiprocessing.Process(target=executor.run)
-        process.start()
+    # Start monitoring loop.
+    if configuration['monitoring']['enabled']:
+        log.info(
+            'Monitoring enabled every {} seconds'.format(
+                configuration['monitoring']['interval']
+            )
+        )
+        while True:
+            for name, simulation in running:
+                if not simulation.is_alive():
+                    try:
+                        log.error('{} died, respawning'.format(name))
+                        running[name] = run_simulation(name)
+                    except AttributeError as x:
+                        log.error('Unable to load simulation {}: {}'.format(
+                            name, x
+                        ))
+                        continue
 
+            log.debug('Monitor run complete, sleeping before next run.')
+            time.sleep(configuration['monitoring']['interval'])
 
 if __name__ == '__main__':
     main()
