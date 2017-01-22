@@ -69,7 +69,7 @@ def main(configuration_file):
             )
         )
         while True:
-            for name, simulation in running:
+            for name, simulation in running.iteritems():
                 if not simulation.is_alive():
                     try:
                         log.error('{} died, respawning'.format(name))
