@@ -3,11 +3,11 @@ logging:
   path: '/opt/kako/logs'
 
 simulation:
-  - 'mirai_cpeserver_soap'
-  - 'mirai_generic_telnet'
-  - 'unknown_dlink_http'
-  - 'unknown_netgear_https'
-  - 'unknown_unknown_rompager'
+  - 'cpeserver_soap'
+  - 'generic_telnetd'
+  - 'dlink_httpd'
+  - 'netgear_httpd'
+  - 'allegro_rompager'
 
 results:
   region: 'us-west-2'

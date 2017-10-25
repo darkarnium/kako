@@ -1,6 +1,4 @@
 import logging
-import pprint
-import SocketServer
 
 from kako.simulation.server import TCP
 from kako.simulation.server import error
@@ -53,16 +51,17 @@ class RequestHandler(TCP.RequestHandler):
 
     def handle(self):
         ''' Extend TCP RequestHandler to implement a fake telnet service. '''
-        self.log.info('Received connection from {}'.format(
+        self.log.info(
+            'Received connection from %s',
             ':'.join(str(x) for x in self.client_address)
-        ))
+        )
 
         # Negotiate with the client, and handle initial login / banner.
         try:
             self.do_iacs()
             self.do_login()
             self.do_banner()
-        except error.ClientDisconnect as e:
+        except error.ClientDisconnect as _:
             self.capture()
             self.log.info('Client force disconnected.')
             return
@@ -73,7 +72,7 @@ class RequestHandler(TCP.RequestHandler):
             self.write('{} '.format(self.prompt.rstrip()))
             try:
                 self.read(1024)
-            except error.ClientDisconnect as e:
+            except error.ClientDisconnect as _:
                 self.log.info('Client force disconnected!')
                 break
 
@@ -81,7 +80,7 @@ class RequestHandler(TCP.RequestHandler):
             cmd = ''.join(map(chr, self.buffer)).strip()
             try:
                 self.write(self.interpreter.handle(cmd))
-            except error.ClientCommandExit as e:
+            except error.ClientCommandExit as _:
                 break
 
         # Record the interaction.

@@ -1,8 +1,8 @@
 import time
-import boto3
-import socket
 import logging
+import socket
 import SocketServer
+import boto3
 
 from kako import messaging
 from kako.simulation.server import error

@@ -1,6 +1,5 @@
 import logging
 
-from kako import constant
 from kako.simulation.server import TCP
 from kako.simulation.server import telnet
 from kako.simulation.system import linux
@@ -9,12 +8,16 @@ from kako.simulation.system import linux
 class CommandInterpreter(linux.CommandInterpreter):
     ''' Implements Mirai specific command interpretation. '''
 
-    def do_wget(self, args=[]):
+    def do_wget(self, args=None):
         ''' Implement `wget` stub. '''
+        if args is None:
+            args = []
         return
 
-    def do_cat(self, args=[]):
+    def do_cat(self, args=None):
         ''' Implement expected Mirai files. '''
+        if args is None:
+            args = []
         if len(args) < 1:
             return
 
@@ -35,8 +38,10 @@ class CommandInterpreter(linux.CommandInterpreter):
         if args[0] == '/proc/mounts':
             return 'rootfs / rootfs rw 0 0'
 
-    def do_ps(self, args=[]):
+    def do_ps(self, args=None):
         ''' Implements Mirai expected processes. '''
+        if args is None:
+            args = []
         process_list = []
         process_list.append("PID   Uid    VmSize    Stat    Command\r\n")
         process_list.append("  1   root      404     S      init")
@@ -45,9 +50,9 @@ class CommandInterpreter(linux.CommandInterpreter):
 
 class RequestHandler(telnet.RequestHandler):
     ''' Implements simulation specific logic. '''
-    simulation = 'mirai_generic_telnet'
-    vulnerability = 'Generic - Default Credentials'
-    simulation_version = '0.2.1'
+    simulation = 'generic_telnetd'
+    vulnerability = 'Generic - Telnet with default credentials'
+    simulation_version = '0.3.0'
 
     def __init__(self, request, client_address, server):
         ''' Override the default telnet server injecting a custom interpreter. '''
@@ -67,7 +72,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/{}".format(self.port))
+        self.log.info("Setting up listener on TCP/%s", str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,

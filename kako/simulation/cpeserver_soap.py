@@ -1,25 +1,22 @@
 import logging
 
-from kako import constant
 from kako.simulation.server import TCP
 from kako.simulation.server import HTTP
 
 
 class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
-    simulation = 'mirai_cpeserver_soap'
-    vulnerability = 'Generic - TR-069 SOAP remote code execution'
-    simulation_version = '0.2.1'
+    banner = 'gSOAP/2.7'
+    simulation = 'cpeserver_soap'
+    simulation_version = '0.3.0'
 
-    def do_POST(self):
-        ''' Implement known SOAP exploit routing. '''
-        if self.path.split('?')[0] == '/UD/act':
-            self.capture(
-                self.rfile.read(
-                    int(self.headers.getheader('content-length', 0))
-                )
-            )
-            self.send_response(200, '')
+    routes_post = [
+        {
+            "route": "/UD/act",
+            "response": None,
+            "vulnerability": "Generic - TR-069 SOAP remote code execution",
+        }
+    ]
 
 
 class Simulation(object):
@@ -32,7 +29,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/{}".format(self.port))
+        self.log.info("Setting up listener on TCP/%s", str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,
