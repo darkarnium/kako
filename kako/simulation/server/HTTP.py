@@ -92,11 +92,11 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
                     if route['response']['headers'] is not None:
                         for header in route['response']['headers']:
                             self.send_header(header['key'], header['value'])
-                        self.end_headers()
                 else:
                     self.send_response(200, 'OK')
 
                 # Finally, submit the body.
+                self.end_headers()
                 self.rfile.write(route['response']['body'])
                 return
 
@@ -111,10 +111,10 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             if self.route_default['headers'] is not None:
                 for header in self.route_default['headers']:
                     self.send_header(header['key'], header['value'])
-                self.end_headers()
 
             # Bolt on the body.
-            self.wfile.write('610cker')
+            self.end_headers()
+            self.wfile.write(self.route_default['body'])
         else:
             self.send_response(404, 'Not Found')
 
