@@ -13,7 +13,7 @@ class RequestHandler(HTTP.RequestHandler):
     routes_post = [
         {
             "route": "/UD/act",
-            "response": None,
+            "response": "",
             "vulnerability": "Generic - TR-069 SOAP remote code execution",
         }
     ]

@@ -14,7 +14,7 @@ class RequestHandler(HTTP.RequestHandler):
     route_default = {
         "code": 401,
         "text": "Unauthorized",
-        "body": None,
+        "body": "",
         "headers": [
             {
                 "key": "WWW-Authenticate",
@@ -40,7 +40,7 @@ class RequestHandler(HTTP.RequestHandler):
             "response": {
                 "code": 200,
                 "text": "OK",
-                "body": None,
+                "body": "",
                 "headers": None,
             },
             "vulnerability": "D-Link - HNAP1 multiple vulnerabilities",

@@ -14,7 +14,7 @@ class RequestHandler(HTTP.RequestHandler):
     route_default = {
         "code": 200,
         "text": "OK",
-        "body": None,
+        "body": "",
         "headers": [
             {
                 "key": "EXT",

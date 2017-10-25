@@ -16,7 +16,7 @@ class RequestHandler(HTTP.RequestHandler):
     route_default = {
         "code": 401,
         "text": "Unauthorized",
-        "body": None,
+        "body": "",
         "headers": [
             {
                 "key": "WWW-Authenticate",
@@ -32,7 +32,7 @@ class RequestHandler(HTTP.RequestHandler):
             "response": {
                 "code": 200,
                 "text": "OK",
-                "body": None,
+                "body": "",
                 "headers": None
             },
             "vulnerability": "NetGear - apply_noauth authentication bypass",
@@ -42,7 +42,7 @@ class RequestHandler(HTTP.RequestHandler):
             "response": {
                 "code": 200,
                 "text": "OK",
-                "body": None,
+                "body": "",
                 "headers": None,
             },
             "vulnerability": "NetGear - cgi_system remote code execution",
@@ -56,7 +56,7 @@ class RequestHandler(HTTP.RequestHandler):
             "response": {
                 "code": 200,
                 "text": "OK",
-                "body": None,
+                "body": "",
                 "headers": None
             },
             "vulnerability": "NetGear - BRS authentication bypass",
