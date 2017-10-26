@@ -77,6 +77,7 @@ class CommandInterpreter(object):
         # Decode encoded characters where required.
         decoded_args = []
         for arg in args:
+            # TODO: This is broke. Fix.
             if "\\x" in arg:
                 try:
                     decoded_args.append(arg.replace("\\x", "").decode("hex"))

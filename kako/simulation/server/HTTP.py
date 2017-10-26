@@ -53,10 +53,21 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def log_request(self, code='-', size='-'):
         ''' Override default request logger and fix formatting. '''
+        # Ensure both the HTTP path and command are set.
+        try:
+            command = self.command
+        except AttributeError:
+            command = 'NO_HTTP_COMMAND'
+        try:
+            path = self.path
+        except AttributeError:
+            path = 'NO_HTTP_PATH'
+
+        # Log it.
         self.log_message(
             'Received HTTP %s for "%s" from %s. Responded with HTTP %s.',
-            self.command if self.command else 'NO_HTTP_COMMAND',
-            self.path if self.path else 'NO_HTTP_PATH',
+            command,
+            path,
             ':'.join(str(x) for x in self.client_address),
             str(code)
         )
