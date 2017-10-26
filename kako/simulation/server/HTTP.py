@@ -15,15 +15,17 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     vulnerability = 'UNKNOWN'
     simulation_version = 'UNKNOWN'
 
-    # Define target routes, and the default (fall-through).
+    # Define lists of target routes.
     route_get = []
     route_head = []
     route_post = []
-    route_default = {
+
+    # Define a default response (404).
+    default_response = {
         'code': 404,
         'text': 'Not Found',
         'body': 'No such file or directory',
-        'headers': None,
+        'headers': [],
     }
 
     def __init__(self, request, client_address, server):
@@ -74,49 +76,31 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_generic(self, route_list):
         ''' Implements generic route handling for requests. '''
-        for route in route_list:
-            if self.path.split('?')[0] == route['route']:
-                self.vulnerability = route['vulnerability']
-                self.capture(
-                    self.rfile.read(
-                        int(self.headers.getheader('content-length', 0))
-                    )
-                )
+        response = None
+        if self.path is not None:
+            for candidate in route_list:
+                if self.path.split('?')[0] == candidate['route']:
+                    response = candidate['response']
+                    self.vulnerability = candidate['vulnerability']
+                    break
 
-                # Repond with a custom response, or '200 OK'.
-                if route['response'] is not None:
-                    self.send_response(
-                        route['response']['code'],
-                        route['response']['text']
-                    )
-                    if route['response']['headers'] is not None:
-                        for header in route['response']['headers']:
-                            self.send_header(header['key'], header['value'])
-                else:
-                    self.send_response(200, 'OK')
+        # If no match was found, use the default response.
+        if response is None:
+            response = self.default_response
 
-                # Finally, submit the body.
-                self.end_headers()
-                self.rfile.write(route['response']['body'])
-                return
-
-        # Otherwise, send the default response.
-        if self.route_default is not None:
-            self.send_response(
-                self.route_default['code'],
-                self.route_default['text']
+        # Capture the request.
+        self.capture(
+            self.rfile.read(
+                int(self.headers.getheader('content-length', 0))
             )
+        )
 
-            # Bolt on any specified headers.
-            if self.route_default['headers'] is not None:
-                for header in self.route_default['headers']:
-                    self.send_header(header['key'], header['value'])
-
-            # Bolt on the body.
-            self.end_headers()
-            self.wfile.write(self.route_default['body'])
-        else:
-            self.send_response(404, 'Not Found')
+        # Reply, bolting on any applicable headers and response body.
+        self.send_response(response['code'], response['text'])
+        for header in response['headers']:
+            self.send_header(header['key'], header['value'])
+        self.end_headers()
+        self.rfile.write(response['body'])
 
     def do_GET(self):
         ''' Implements routing for HTTP GET requests. '''

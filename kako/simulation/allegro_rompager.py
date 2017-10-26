@@ -11,14 +11,14 @@ class RequestHandler(HTTP.RequestHandler):
     simulation_version = '0.2.0'
 
     # Define the response for all invalid routes.
-    route_default = {
-        "code": 200,
-        "text": "OK",
-        "body": "",
-        "headers": [
+    default_response = {
+        'code': 200,
+        'text': 'OK',
+        'body': '',
+        'headers': [
             {
-                "key": "EXT",
-                "value": ""
+                'key': 'EXT',
+                'value': '',
             }
         ],
     }
@@ -34,7 +34,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/%s", str(self.port))
+        self.log.info('Setting up listener on TCP/%s', str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,

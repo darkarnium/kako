@@ -10,11 +10,17 @@ class RequestHandler(HTTP.RequestHandler):
     simulation = 'cpeserver_soap'
     simulation_version = '0.3.0'
 
+    # Define all valid POST routes.
     routes_post = [
         {
-            "route": "/UD/act",
-            "response": "",
-            "vulnerability": "Generic - TR-069 SOAP remote code execution",
+            'route': '/UD/act',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '',
+                'headers': [],
+            },
+            'vulnerability': 'Generic - TR-069 SOAP remote code execution',
         }
     ]
 
@@ -29,7 +35,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/%s", str(self.port))
+        self.log.info('Setting up listener on TCP/%s', str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,

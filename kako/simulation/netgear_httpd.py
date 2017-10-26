@@ -9,18 +9,18 @@ from kako.simulation.server import HTTP
 class RequestHandler(HTTP.RequestHandler):
     ''' Implements simulation specific logic. '''
     banner = None
-    simulation = 'netgear_https'
+    simulation = 'netgear_httpd'
     simulation_version = '0.2.0'
 
     # Define the response for all invalid routes.
-    route_default = {
-        "code": 401,
-        "text": "Unauthorized",
-        "body": "",
-        "headers": [
+    default_response = {
+        'code': 401,
+        'text': 'Unauthorized',
+        'body': '',
+        'headers': [
             {
-                "key": "WWW-Authenticate",
-                "value": "Basic realm=\"NETGEAR R7000\""
+                'key': 'WWW-Authenticate',
+                'value': 'Basic realm="NETGEAR R7000"'
             }
         ],
     }
@@ -28,38 +28,38 @@ class RequestHandler(HTTP.RequestHandler):
     # Define all valid POST routes.
     route_post = [
         {
-            "route": "/apply_noauth.cgi",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "",
-                "headers": None
+            'route': '/apply_noauth.cgi',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '',
+                'headers': [],
             },
-            "vulnerability": "NetGear - apply_noauth authentication bypass",
+            'vulnerability': 'NetGear - apply_noauth authentication bypass',
         },
         {
-            "route": "/cgi-bin/cgi_system",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "",
-                "headers": None,
+            'route': '/cgi-bin/cgi_system',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '',
+                'headers': [],
             },
-            "vulnerability": "NetGear - cgi_system remote code execution",
+            'vulnerability': 'NetGear - cgi_system remote code execution',
         }
     ]
 
     # Define all valid GET routes.
     route_get = [
         {
-            "route": "/BRS_netgear_success.html",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "",
-                "headers": None
+            'route': '/BRS_netgear_success.html',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '',
+                'headers': [],
             },
-            "vulnerability": "NetGear - BRS authentication bypass",
+            'vulnerability': 'NetGear - BRS authentication bypass',
         },
     ]
 
@@ -74,7 +74,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/%s", str(self.port))
+        self.log.info('Setting up listener on TCP/%s', str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,

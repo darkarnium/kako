@@ -11,14 +11,14 @@ class RequestHandler(HTTP.RequestHandler):
     simulation_version = '0.2.0'
 
     # Define the response for all invalid routes.
-    route_default = {
-        "code": 401,
-        "text": "Unauthorized",
-        "body": "",
-        "headers": [
+    default_response = {
+        'code': 401,
+        'text': 'Unauthorized',
+        'body': '',
+        'headers': [
             {
-                "key": "WWW-Authenticate",
-                "value": "Basic realm=\"D-Link Router\""
+                'key': 'WWW-Authenticate',
+                'value': 'Basic realm="D-Link Router"',
             }
         ],
     }
@@ -26,38 +26,38 @@ class RequestHandler(HTTP.RequestHandler):
     # Define all valid POST routes.
     route_post = [
         {
-            "route": "/command.php",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "610cker",
-                "headers": None
+            'route': '/command.php',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '610cker',
+                'headers': [],
             },
-            "vulnerability": "D-Link - command.php remote code execution",
+            'vulnerability': 'D-Link - command.php remote code execution',
         },
         {
-            "route": "/HNAP1",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "",
-                "headers": None,
+            'route': '/HNAP1',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '',
+                'headers': [],
             },
-            "vulnerability": "D-Link - HNAP1 multiple vulnerabilities",
+            'vulnerability': 'D-Link - HNAP1 multiple vulnerabilities',
         }
     ]
 
     # Define all valid GET routes.
     route_get = [
         {
-            "route": "/language/",
-            "response": {
-                "code": 200,
-                "text": "OK",
-                "body": "610cker",
-                "headers": None
+            'route': '/language/',
+            'response': {
+                'code': 200,
+                'text': 'OK',
+                'body': '610cker',
+                'headers': [],
             },
-            "vulnerability": "D-Link - Language remote code execution",
+            'vulnerability': 'D-Link - Language remote code execution',
         },
     ]
 
@@ -72,7 +72,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/%s", str(self.port))
+        self.log.info('Setting up listener on TCP/%s', str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,

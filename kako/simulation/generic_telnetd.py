@@ -43,8 +43,8 @@ class CommandInterpreter(linux.CommandInterpreter):
         if args is None:
             args = []
         process_list = []
-        process_list.append("PID   Uid    VmSize    Stat    Command\r\n")
-        process_list.append("  1   root      404     S      init")
+        process_list.append('PID   Uid    VmSize    Stat    Command\r\n')
+        process_list.append('  1   root      404     S      init')
         return ''.join(process_list)
 
 
@@ -72,7 +72,7 @@ class Simulation(object):
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info("Setting up listener on TCP/%s", str(self.port))
+        self.log.info('Setting up listener on TCP/%s', str(self.port))
         service = TCP.Server(
             ('0.0.0.0', self.port),
             RequestHandler,
