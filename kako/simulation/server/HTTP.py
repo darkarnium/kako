@@ -56,7 +56,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.log_message(
             'Received HTTP %s for "%s" from %s. Responded with HTTP %s.',
             self.command if self.command else 'NO_HTTP_COMMAND',
-            self.path if self.path else 'NO_HTTP_PATH,
+            self.path if self.path else 'NO_HTTP_PATH',
             ':'.join(str(x) for x in self.client_address),
             str(code)
         )
