@@ -1,6 +1,6 @@
 import logging
 
-from kako.simulation.server import TCP
+from kako.simulation.server import tcp
 from kako.simulation.server import error
 from kako.simulation.system import linux
 
