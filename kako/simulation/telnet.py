@@ -1,6 +1,8 @@
+''' Implements manifest driven Telnet simulation for Kako. '''
+
 import logging
 
-from kako.simulation.server import TCP
+from kako.simulation.server import tcp
 from kako.simulation.server import telnet
 from kako.simulation.system import linux
 
@@ -59,21 +61,21 @@ class RequestHandler(telnet.RequestHandler):
         self.prompt = '#'
         self.hostname = 'default'
         self.interpreter = CommandInterpreter()
-        TCP.RequestHandler.__init__(self, request, client_address, server)
+        tcp.RequestHandler.__init__(self, request, client_address, server)
 
 
 class Simulation(object):
     ''' Simulation for a vulnerable Telnet service. '''
 
     def __init__(self, configuration):
-        self.log = logging.getLogger()
+        self.log = logging.getLogger(__name__)
         self.port = 2323
         self.configuration = configuration
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
         self.log.info('Setting up listener on TCP/%s', str(self.port))
-        service = TCP.Server(
+        service = tcp.Server(
             ('0.0.0.0', self.port),
             RequestHandler,
             self.configuration

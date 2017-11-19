@@ -8,15 +8,18 @@ SCHEMA = {
             'path': {'type': 'string'}
         }
     },
+    'simulations': {
+        'type': 'dict',
+        'schema': {
+            'path': {'type': 'string'}
+        }
+    },
     'monitoring': {
         'type': 'dict',
         'schema': {
             'enabled': {'type': 'boolean'},
             'interval': {'type': 'integer'}
         }
-    },
-    'simulation': {
-        'type': 'list'
     },
     'results': {
         'type': 'dict',
@@ -30,6 +33,6 @@ SCHEMA = {
 
 def validate(config):
     ''' Test whether the provided configuration object is valid. '''
-    v = Validator(SCHEMA)
-    if not v.validate(config):
-        raise AttributeError(v.errors)
+    linter = Validator(SCHEMA)
+    if not linter.validate(config):
+        raise AttributeError(linter.errors)

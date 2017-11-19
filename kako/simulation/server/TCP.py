@@ -10,13 +10,21 @@ from kako.simulation.server import error
 
 class RequestHandler(SocketServer.BaseRequestHandler):
     ''' Implements TCP handling for client connections. '''
+    port = 'UNKNOWN'
+    protocol = 'tcp'
     simulation = 'UNKNOWN'
     vulnerability = 'UNKNOWN'
     simulation_version = 'UNKNOWN'
 
     def __init__(self, request, client_address, server):
-        ''' Bolt on a logger to push messages back to Kako. '''
-        self.log = logging.getLogger()
+        ''' Extends parent with additional SNS channel and logger. '''
+        self.log = logging.getLogger(__name__)
+        self.port = server.manifest['port']
+        self.version = server.manifest['version']
+        self.protocol = server.manifest['protocol']
+        self.simulation = server.manifest['name']
+
+        # Results tracking.
         self.buffer = []
         self.record = []
 
@@ -49,14 +57,16 @@ class RequestHandler(SocketServer.BaseRequestHandler):
     def capture(self):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
-            ts=int(time.time()),
-            cap=self.record,
-            vuln=self.vulnerability,
+            timestamp=int(time.time()),
+            capture=self.record,
+            vulnerability=self.vulnerability,
             node=socket.gethostname(),
-            src_ip=self.client_address[0],
-            src_port=self.client_address[1],
-            sim_name=self.simulation,
-            sim_version=self.simulation_version
+            destination_ip='TODO',
+            destination_port=self.port,
+            source_ip=self.client_address[0],
+            source_port=self.client_address[1],
+            simulation_name=self.simulation,
+            simulation_version=self.simulation_version
         )
 
         # Publish to SNS.
@@ -68,10 +78,11 @@ class RequestHandler(SocketServer.BaseRequestHandler):
 
 
 class Server(SocketServer.ThreadingTCPServer):
-    ''' Extends SocketServer ThreadingTCPServer to provide configuration. '''
+    ''' Extends SocketServer ThreadingTCPServer to provide configurability. '''
 
-    def __init__(self, server_address, RequestHandlerClass, configuration):
+    def __init__(self, server_address, RequestHandlerClass, manifest, configuration):
         SocketServer.ThreadingTCPServer.__init__(
             self, server_address, RequestHandlerClass
         )
         self.configuration = configuration
+        self.manifest = manifest

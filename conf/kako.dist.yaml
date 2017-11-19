@@ -2,12 +2,8 @@
 logging:
   path: '/opt/kako/logs'
 
-simulation:
-  - 'cpeserver_soap'
-  - 'generic_telnetd'
-  - 'dlink_httpd'
-  - 'netgear_httpd'
-  - 'allegro_rompager'
+simulations:
+  path: '/opt/kako/simulations/'
 
 results:
   region: 'us-west-2'

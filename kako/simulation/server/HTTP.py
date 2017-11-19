@@ -10,27 +10,29 @@ from kako import messaging
 
 class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
     ''' Implements HTTP handling for client connections. '''
-    banner = 'uhttpd/1.0.0'
+    port = 'UNKNOWN'
+    protocol = 'http'
     simulation = 'UNKNOWN'
     vulnerability = 'UNKNOWN'
     simulation_version = 'UNKNOWN'
 
-    # Define lists of target routes.
-    route_get = []
-    route_head = []
-    route_post = []
-
-    # Define a default response (404).
-    default_response = {
-        'code': 404,
-        'text': 'Not Found',
-        'body': 'No such file or directory',
-        'headers': [],
-    }
-
     def __init__(self, request, client_address, server):
-        ''' Bolt on a logger to push messages back to Kako. '''
-        self.log = logging.getLogger()
+        ''' Extends parent with additional SNS channel and logger. '''
+        self.log = logging.getLogger(__name__)
+        self.port = server.manifest['port']
+        self.version = server.manifest['version']
+        self.protocol = server.manifest['protocol']
+        self.simulation = server.manifest['name']
+
+        self.banner = server.manifest['server']['banner']
+        self.default_response = server.manifest['server']['response']
+
+        self.routes_get = server.manifest['server']['routes']['get']
+        self.routes_post = server.manifest['server']['routes']['post']
+        self.routes_head = server.manifest['server']['routes']['head']
+        self.routes_options = server.manifest['server']['routes']['options']
+
+        # Suppress client errors.
         self.error_message_format = ''
 
         # Setup an AWS SNS client for publishing captures.
@@ -76,11 +78,11 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         ''' Overrides built-in version headers in HTTP responses.'''
         return self.banner
 
-    def do_generic(self, route_list):
+    def do_generic(self, routes):
         ''' Implements generic route handling for requests. '''
         response = None
         if self.path is not None:
-            for candidate in route_list:
+            for candidate in routes:
                 if self.path.split('?')[0] == candidate['route']:
                     response = candidate['response']
                     self.vulnerability = candidate['vulnerability']
@@ -106,15 +108,19 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
 
     def do_GET(self):
         ''' Implements routing for HTTP GET requests. '''
-        self.do_generic(route_list=self.route_get)
+        self.do_generic(routes=self.routes_get)
 
     def do_POST(self):
         ''' Implements routing for HTTP POST requests. '''
-        self.do_generic(route_list=self.route_post)
+        self.do_generic(routes=self.routes_post)
 
     def do_HEAD(self):
         ''' Implements routing for HTTP HEAD requests. '''
-        self.do_generic(route_list=self.route_head)
+        self.do_generic(routes=self.routes_head)
+
+    def do_OPTIONS(self):
+        ''' Implements routing for HTTP HEAD requests. '''
+        self.do_generic(routes=self.routes_options)
 
     def capture(self, payload):
         ''' Implements 'capture' functionality for identified requests. '''
@@ -124,14 +130,16 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         request.append(payload)
 
         msg = messaging.capture.Capture(
-            ts=int(time.time()),
-            cap=request,
-            vuln=self.vulnerability,
+            timestamp=int(time.time()),
+            capture=request,
+            vulnerability=self.vulnerability,
             node=socket.gethostname(),
-            src_ip=self.client_address[0],
-            src_port=self.client_address[1],
-            sim_name=self.simulation,
-            sim_version=self.simulation_version
+            destination_ip='TODO',
+            destination_port=self.port,
+            source_ip=self.client_address[0],
+            source_port=self.client_address[1],
+            simulation_name=self.simulation,
+            simulation_version=self.simulation_version
         )
 
         # Publish to SNS.

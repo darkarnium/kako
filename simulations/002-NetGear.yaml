@@ -1,0 +1,54 @@
+---
+name: NetGear HTTPS Simulation
+port: 8443
+version: 0.1.0
+protocol: https
+server:
+  banner: ''
+  response:
+    code: 401
+    text: 'Unauthorized'
+    body: ''
+    headers:
+      - key: 'WWW-Authenticate'
+        value: 'Basic realm="NETGEAR R7000"'
+  routes:
+    options: []
+    head: []
+    post:
+      - vulnerability: 'NetGear - apply_noauth authentication bypass'
+        route: '/apply_noauth.cgi'
+        response: 
+          code: 200
+          text: 'OK'
+          body: ''
+          headers: []
+      - vulnerability: 'NetGear - cgi_system remote code execution'
+        route: '/cgi-bin/cgi_system'
+        response: 
+          code: 200
+          text: 'OK'
+          body: ''
+          headers: []
+    get:
+      - vulnerability: 'NetGear - BRS authentication bypass'
+        route: '/BRS_netgear_success.html'
+        response: 
+          code: 200
+          text: 'OK'
+          body: ''
+          headers: []
+      - vulnerability: 'NetGear - upgrade_handle.php remote code execution'
+        route: '/upgrade_handle.php'
+        response:
+          code: 200
+          text: OK
+          body: ''
+          headers: []
+      - vulnerability: 'NetGear - DGN1000 setup.cgi remote code execution'
+        route: '/upgrade_handle.php'
+        response:
+          code: 200
+          text: OK
+          body: ''
+          headers: []

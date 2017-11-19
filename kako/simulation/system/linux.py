@@ -1,3 +1,5 @@
+''' Implements Linux command-line (Busybox) emulation for Kako. '''
+
 import re
 
 from kako.simulation.server import error
@@ -9,12 +11,8 @@ class CommandInterpreter(object):
 
     def do_busybox(self, args=None):
         ''' Wrapper the handle() method to handle BusyBox applets. '''
-        if args is None:
-            args = []
-
-        if len(args) > 0:
+        if args:
             result = self.handle(' '.join(args))
-            # TODO: Fix this hack.
             if re.match(r'^sh:\s', result):
                 return '{}: applet not found'.format(args[0])
             else:
@@ -77,7 +75,6 @@ class CommandInterpreter(object):
         # Decode encoded characters where required.
         decoded_args = []
         for arg in args:
-            # TODO: This is broke. Fix.
             if "\\x" in arg:
                 try:
                     decoded_args.append(arg.replace("\\x", "").decode("hex"))
