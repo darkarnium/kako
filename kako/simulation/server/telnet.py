@@ -5,7 +5,7 @@ from kako.simulation.server import error
 from kako.simulation.system import linux
 
 
-class RequestHandler(TCP.RequestHandler):
+class RequestHandler(tcp.RequestHandler):
     ''' Implements Telnet handling for client connections. '''
     port = 'UNKNOWN'
     protocol = 'tcp'
@@ -27,7 +27,7 @@ class RequestHandler(TCP.RequestHandler):
 
         self.interpreter = linux.CommandInterpreter()
 
-        TCP.RequestHandler.__init__(self, request, client_address, server)
+        tcp.RequestHandler.__init__(self, request, client_address, server)
 
     def do_iacs(self):
         ''' Sends Telnet negotiation messages to the client (IAC). '''
