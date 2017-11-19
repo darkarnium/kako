@@ -23,6 +23,7 @@ class RequestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         self.version = server.manifest['version']
         self.protocol = server.manifest['protocol']
         self.simulation = server.manifest['name']
+        self.simulation_version = server.manifest['version']
 
         self.banner = server.manifest['server']['banner']
         self.default_response = server.manifest['server']['response']

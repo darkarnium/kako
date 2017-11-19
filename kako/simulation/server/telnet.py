@@ -18,11 +18,12 @@ class RequestHandler(TCP.RequestHandler):
         self.prompt = '#'
         self.hostname = 'default'
 
-        self.banner = server.manifest['banner']
+        self.banner = server.manifest['server']['banner']
         self.port = server.manifest['port']
         self.version = server.manifest['version']
         self.protocol = server.manifest['protocol']
         self.simulation = server.manifest['name']
+        self.simulation_version = server.manifest['version']
 
         self.interpreter = linux.CommandInterpreter()
 
@@ -52,13 +53,14 @@ class RequestHandler(TCP.RequestHandler):
 
     def do_login(self):
         ''' Simulates a login prompt and captures the credentials. '''
-        self.write('{}\r\n'.format(self.banner))
+        self.write(self.banner)
+        self.write('\r\n\r\n')
         self.write('{} login: '.format(self.hostname))
         self.read(1024)
         self.write('Password: ')
         self.read(1024)
 
-    def do_banner(self):
+    def do_motd(self):
         ''' Simulates an MOTD style banner (after login). '''
         self.write("\r\n")
 
@@ -73,7 +75,7 @@ class RequestHandler(TCP.RequestHandler):
         try:
             self.do_iacs()
             self.do_login()
-            self.do_banner()
+            self.do_motd()
         except error.ClientDisconnect as _:
             self.capture()
             self.log.info('Client force disconnected.')

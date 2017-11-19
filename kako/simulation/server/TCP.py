@@ -23,6 +23,7 @@ class RequestHandler(SocketServer.BaseRequestHandler):
         self.version = server.manifest['version']
         self.protocol = server.manifest['protocol']
         self.simulation = server.manifest['name']
+        self.simulation_version = server.manifest['version']
 
         # Results tracking.
         self.buffer = []
