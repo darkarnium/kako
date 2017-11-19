@@ -62,6 +62,12 @@ class CommandInterpreter(object):
             args = []
         return
 
+    def do_wget(self, args=None):
+        ''' Stub `wget`. '''
+        if args is None:
+            args = []
+        return
+
     def handle(self, command):
         ''' Dispatches the input command to the relevant handler. '''
         args = re.split(r'\s+', command)

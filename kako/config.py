@@ -1,3 +1,5 @@
+''' Implements configuration validation for Kako. '''
+
 from cerberus import Validator
 
 # Define the configuration schema (for validation).

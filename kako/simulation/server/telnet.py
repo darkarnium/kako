@@ -7,11 +7,23 @@ from kako.simulation.system import linux
 
 class RequestHandler(TCP.RequestHandler):
     ''' Implements Telnet handling for client connections. '''
+    port = 'UNKNOWN'
+    protocol = 'tcp'
+    simulation = 'UNKNOWN'
+    vulnerability = 'UNKNOWN'
+    simulation_version = 'UNKNOWN'
 
     def __init__(self, request, client_address, server):
         ''' Setup versions and system names for this service. '''
         self.prompt = '#'
         self.hostname = 'default'
+
+        self.banner = server.manifest['banner']
+        self.port = server.manifest['port']
+        self.version = server.manifest['version']
+        self.protocol = server.manifest['protocol']
+        self.simulation = server.manifest['name']
+
         self.interpreter = linux.CommandInterpreter()
 
         TCP.RequestHandler.__init__(self, request, client_address, server)
@@ -40,6 +52,7 @@ class RequestHandler(TCP.RequestHandler):
 
     def do_login(self):
         ''' Simulates a login prompt and captures the credentials. '''
+        self.write('{}\r\n'.format(self.banner))
         self.write('{} login: '.format(self.hostname))
         self.read(1024)
         self.write('Password: ')

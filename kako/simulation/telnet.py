@@ -10,12 +10,6 @@ from kako.simulation.system import linux
 class CommandInterpreter(linux.CommandInterpreter):
     ''' Implements Mirai specific command interpretation. '''
 
-    def do_wget(self, args=None):
-        ''' Implement `wget` stub. '''
-        if args is None:
-            args = []
-        return
-
     def do_cat(self, args=None):
         ''' Implement expected Mirai files. '''
         if args is None:
@@ -50,34 +44,23 @@ class CommandInterpreter(linux.CommandInterpreter):
         return ''.join(process_list)
 
 
-class RequestHandler(telnet.RequestHandler):
-    ''' Implements simulation specific logic. '''
-    simulation = 'generic_telnetd'
-    vulnerability = 'Generic - Telnet with default credentials'
-    simulation_version = '0.3.0'
-
-    def __init__(self, request, client_address, server):
-        ''' Override the default telnet server injecting a custom interpreter. '''
-        self.prompt = '#'
-        self.hostname = 'default'
-        self.interpreter = CommandInterpreter()
-        tcp.RequestHandler.__init__(self, request, client_address, server)
-
-
 class Simulation(object):
     ''' Simulation for a vulnerable Telnet service. '''
 
-    def __init__(self, configuration):
+    def __init__(self, manifest, configuration):
         self.log = logging.getLogger(__name__)
-        self.port = 2323
+        self.manifest = manifest
         self.configuration = configuration
 
     def run(self):
         ''' Implements the main runable for the simulation. '''
-        self.log.info('Setting up listener on TCP/%s', str(self.port))
+        self.log.info(
+            'Setting up listener on TCP/%s', str(self.manifest['port'])
+        )
         service = tcp.Server(
-            ('0.0.0.0', self.port),
-            RequestHandler,
+            ('0.0.0.0', self.manifest['port']),
+            telnet.RequestHandler,
+            self.manifest,
             self.configuration
         )
         service.serve_forever()
