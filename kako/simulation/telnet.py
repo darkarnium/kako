@@ -4,7 +4,6 @@ import logging
 
 from kako.simulation.server import tcp
 from kako.simulation.server import telnet
-from kako.simulation.system import linux
 
 
 class Simulation(object):
