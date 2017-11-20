@@ -1,5 +1,7 @@
 # Kako
 
+![Kako](docs/images/kako.png?raw=true)
+
 This project provides honeypots for a number of well known and deployed embedded device vulnerabilities. This project is intended for use in cataloging attack sources, droppers and payloads. The default configuration will run a given set of simulations and capture information relating to the origin of the requests, the body of the request, and attempt to process and collect the payload - if supported.
 
 ## Dependencies
