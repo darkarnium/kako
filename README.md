@@ -52,7 +52,7 @@ Simply put, simulations provide data light-weight 'emulation' of a given target.
 
 The following simulations are currently included:
 
-* `000-LinuxTelnet.yaml - Generic Telnet
+* `000-LinuxTelnet.yaml` - Generic Telnet
   * Simulates a vulnerable telnet service (default credentials).
 * `001-CPEServer.yaml` - CPEServer SOAP
   * Simulates a vulnerable CPEServer SOAP service (command injection).
