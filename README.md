@@ -21,6 +21,12 @@ The configuration for Kako is performed via a YAML document - named `kako.yaml` 
 
 Currently, Kako assumes that `boto3` is able to enumerate credentials to access the configured SNS and S3 resources without intervention. This may be via `~/.aws/credentials` file, IAM Instance Profiles (recommended), environment variables, or otherwise. There is currently no ability to provide AWS access keys directly.
 
+### AWS Configuration
+
+In order for Kako to operate properly, an SNS topic should be configured inside of AWS. The ARN for this topic will need to be provided as part of the Kako configuration, and a set of access-keys with permission to Publish to this SNS Topic ARN will be required to be present per the above section ('AWS API'). Further to this, the 'results->topic' attribute in the Kako configuration should be set to the ARN for this AWS SNS topic.
+
+The output from the SNS Topic can be configured as desired. However, this has been successfully deployed using SNS to push messages into an SQS queue from which an external process consumes messages.
+
 #### Policies
 
 The following provides an example IAM policy which can be used to create and grant a user access to publish to the SNS topic - for use with Kako:
@@ -41,10 +47,6 @@ The following provides an example IAM policy which can be used to create and gra
     ]
 }
 ```
-
-#### Results Topic
-
-The 'results->topic' attribute in the configuration is the ARN for a pre-configured AWS SNS topic for results to be submitted to. This can be used to push results into an AWS SQS queue from which external services can then fetch and process messages.
 
 ## Simulations
 
