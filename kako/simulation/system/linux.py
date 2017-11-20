@@ -1,7 +1,6 @@
 ''' Implements Linux command-line (Busybox) emulation for Kako. '''
 
 import re
-
 from kako.simulation.server import error
 
 
