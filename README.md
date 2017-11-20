@@ -101,10 +101,12 @@ For services that require SSL, such as NetGear remote management simulations, an
 
 ```
 # Windows.
-openssl req -new -subj '//C=US\ST=California\L=San Jose\O=NETGEAR\OU=Home Consumer Products\CN=www.routerlogin.net' -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
+openssl req -new -subj '//C=US\ST=California\L=San Jose\O=NETGEAR\OU=Home Consumer Products\CN=www.routerlogin.net' \
+  -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
 
 # *Nix.
-openssl req -new -subj '/C=US/ST=California/L=San Jose/O=NETGEAR/OU=Home Consumer Products/CN=www.routerlogin.net' -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
+openssl req -new -subj '/C=US/ST=California/L=San Jose/O=NETGEAR/OU=Home Consumer Products/CN=www.routerlogin.net' \
+  -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
 ```
 
 ## FAQ
