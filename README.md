@@ -121,4 +121,4 @@ The use of AWS SQS / SNS on the back-end allows for easy deployment and aggregat
 
 A basic Chef environment cookbook for deploying and configuring Kako can be found at the following URL:
 
-* https://www.github.com/darkarnium/om-kako-env/
+* https://www.github.com/darkarnium/om-env-kako/
