@@ -1,5 +1,3 @@
-# Kako
-
 ![Kako](docs/images/kako.png?raw=true)
 
 This project provides honeypots for a number of well known and deployed embedded device vulnerabilities.
