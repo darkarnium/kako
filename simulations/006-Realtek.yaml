@@ -1,0 +1,30 @@
+---
+name: Realtek SDK
+port: 52869
+version: 0.1.0
+protocol: http
+server:
+  banner: 'miniupnpd/1.0 UPnP/1.0'
+  response:
+    code: 200
+    text: 'OK'
+    body: ''
+    headers:
+      - key: 'Location'
+        value: 'http://192.168.1.1:52869/picsdesc.xml'
+      - key: 'USN'
+        value: 'uuid:c89d5979-b027-469b-a639-52f535bde6c0::upnp:rootdevice'
+  routes:
+    options: []
+    head: []
+    post:
+      - vulnerability: 'Miniigd UPnP - SOAP Command Execution'
+        route: '/wanipcn.xml'
+        response: 
+          code: 200
+          text: 'OK'
+          body: ''
+          headers:
+            - key: 'Content-Type'
+              value: 'text/xml'
+    get: []
