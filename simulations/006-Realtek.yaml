@@ -1,5 +1,5 @@
 ---
-name: Realtek SDK
+name: Realtek uPnP Simulation
 port: 52869
 version: 0.1.0
 protocol: http

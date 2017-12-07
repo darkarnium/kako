@@ -92,14 +92,14 @@ def main(configuration_file):
                     try:
                         log.error(
                             'simulation %s has died, respawning',
-                            simulations[idx]['name']
+                            manifests[idx]['name']
                         )
                         simulations[idx] = run_simulation(
-                            simulations[idx], configuration
+                            manifests[idx], configuration
                         )
                     except AttributeError as err:
                         log.error(
-                            'Unable to load %s: %s', simulations[idx]['name'],
+                            'Unable to load %s: %s', manifests[idx]['name'],
                             err
                         )
                         continue

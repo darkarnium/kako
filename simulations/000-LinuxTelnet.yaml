@@ -1,5 +1,5 @@
 ---
-name: Linux Generic Telnet
+name: Linux Generic Telnet Simulation
 port: 2323
 version: 0.1.0
 protocol: telnet

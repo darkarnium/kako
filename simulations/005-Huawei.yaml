@@ -1,5 +1,5 @@
 ---
-name: Unpublished Huawei Exploit
+name: Huawei uPnP Simulation
 port: 37215
 version: 0.1.0
 protocol: http
@@ -11,7 +11,7 @@ server:
     body: ''
     headers:
       - key: 'LOCATION'
-        value: 'http://192.168.1.1:37215/X'
+        value: 'http://192.168.1.1:37215/gatedesc.xml'
       - key: 'CACHE-CONTROL'
         value: 'max-age=86580'
       - key: 'EXT'

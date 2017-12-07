@@ -1,5 +1,5 @@
 ---
-name: Generic uPnP
+name: Generic uPnP Simulation
 port: 1900
 version: 0.1.0
 protocol: http
