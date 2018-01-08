@@ -17,11 +17,21 @@ Once these modules are installed, a valid configuration file is required. See th
 
 ## Configuration
 
-The configuration for Kako is performed via a YAML document - named `kako.yaml` by default. An example configuration ships with Kako and is named `kako.dist.yaml`.
+The configuration for Kako is performed via a YAML document - named `kako.yaml` by default.
 
-### AWS API
+## Output
 
-Currently, Kako assumes that `boto3` is able to enumerate credentials to access the configured SNS and S3 resources without intervention. This may be via `~/.aws/credentials` file, IAM Instance Profiles (recommended), environment variables, or otherwise. There is currently no ability to provide AWS access keys directly.
+Two output formats are supported by Kako at this time: AWS SNS, and flat-file JSON. The former is intended for environments which may be part of a wider distributed deployment, whereas the latter allows for easy integration into existing environments which may also collect other honeypot logs from disk via something like Logstash.
+
+### File (JSON)
+
+Generates a new JSON document for each captured interaction with the honeypot, this is then appended to a file in the provided destination directory. Each line of this file should be processed as a new JSON document, as writing a new file per interaction can quickly yield a massive number of small documents on disk.
+
+### AWS SNS
+
+For use with SNS output, Kako assumes that `boto3` is able to enumerate credentials to access the configured SNS and S3 resources without intervention. This may be via `~/.aws/credentials` file, IAM Instance Profiles (when deployed in AWS), environment variables, or otherwise.
+
+There is currently no ability to provide AWS access keys directly.
 
 ### AWS Configuration
 
@@ -52,20 +62,9 @@ The following provides an example IAM policy which can be used to create and gra
 
 ## Simulations
 
-Simply put, simulations provide data light-weight 'emulation' of a given target. These are defined in YAML inside of the `simulations/` directory and will be linted, loaded and provisioned during Kako startup.
+A number of example simulations can be found in the following repository:
 
-The following simulations are currently included:
-
-* `000-LinuxTelnet.yaml` - Generic Telnet
-  * Simulates a vulnerable telnet service (default credentials).
-* `001-CPEServer.yaml` - CPEServer SOAP
-  * Simulates a vulnerable CPEServer SOAP service (command injection).
-* `002-NetGear.yaml` - NetGear HTTPS
-  * Simulates a vulnerable NetGear router HTTPS web interface.
-* `003-D-Link.yaml` - D-Link HTTP
-  * Simulates a vulnerable D-Link router HTTP web interface.
-* `004-Rompager.yaml` - Unknown RomPager
-  * Simulates a vulnerable router RomPager HTTP interface.
+* https://www.github.com/darkarnium/kako-simulations/
 
 ## Servers
 
@@ -83,13 +82,13 @@ The following servers are currently included:
 * HTTPS
   * The same as HTTP but has an SSL listener though use of `ssl.wrap_socket()`.
 
-The above servers can be easily extended to implement required functionality for the given vulnerable service. The two example simulations, discussed above in the `Simulations`, provide examples of how to extend the base classes to implement the required functionality.
+The above servers can also be extended without too much effort to implement required functionality for the given vulnerable service.
 
 ### Installation
 
 Installation and configuration of a new simulation can be performed in the following manner:
 
-1. Create a new simulation YAML definition in `simulations/`.
+1. Add a new simulation into the configured simulation directory - with a file suffix of `.yaml`.
 2. Start / Restart Kako.
 3. Done! :)
 
@@ -98,11 +97,6 @@ Installation and configuration of a new simulation can be performed in the follo
 For services that require SSL, such as NetGear remote management simulations, an SSL certificate is required. These can easily be generated with the following command:
 
 ```
-# Windows.
-openssl req -new -subj '//C=US\ST=California\L=San Jose\O=NETGEAR\OU=Home Consumer Products\CN=www.routerlogin.net' \
-  -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
-
-# *Nix.
 openssl req -new -subj '/C=US/ST=California/L=San Jose/O=NETGEAR/OU=Home Consumer Products/CN=www.routerlogin.net' \
   -x509 -keyout conf/routerlogin.pem -out conf/routerlogin.pem -days 3650 -nodes
 ```
@@ -119,6 +113,7 @@ The use of AWS SQS / SNS on the back-end allows for easy deployment and aggregat
 
 ## Additional Reading
 
-A basic Chef environment cookbook for deploying and configuring Kako can be found at the following URL:
-
-* https://www.github.com/darkarnium/om-env-kako/
+* Example and common Kako simulations
+** https://www.github.com/darkarnium/kako-simulations/
+* Ogawa project for consuming data from AWS SQS into ElasticSearch.
+** https://www.github.com/darkarnium/ogawa/
