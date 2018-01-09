@@ -32,5 +32,5 @@ server:
           body: ''
           headers:
             - key: 'Content-Type'
-value: 'text/xml'
+              value: 'text/xml'
     get: []
