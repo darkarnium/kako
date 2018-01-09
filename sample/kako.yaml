@@ -14,7 +14,7 @@ results:
 #   processor: sns
 #   attributes:
 #     region: 'us-west-2'
-#     topic: 'TOPIC_NAME'
+#     topic: 'arn:aws:sns:<region>:<account>:<topic>'
 
 monitoring:
   enabled: True

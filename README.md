@@ -94,7 +94,7 @@ Installation and configuration of a new simulation can be performed in the follo
 
 ### SSL
 
-For services that require SSL, such as NetGear remote management simulations, an SSL certificate is required. These can easily be generated with the following command:
+For services that require SSL an SSL certificate and private key are required. These can easily be generated with the following command:
 
 ```
 openssl req -new -subj '/C=US/ST=California/L=San Jose/O=NETGEAR/OU=Home Consumer Products/CN=www.routerlogin.net' \
@@ -114,6 +114,6 @@ The use of AWS SQS / SNS on the back-end allows for easy deployment and aggregat
 ## Additional Reading
 
 * Example and common Kako simulations
-** https://www.github.com/darkarnium/kako-simulations/
+  * https://www.github.com/darkarnium/kako-simulations/
 * Ogawa project for consuming data from AWS SQS into ElasticSearch.
-** https://www.github.com/darkarnium/ogawa/
+  * https://www.github.com/darkarnium/ogawa/

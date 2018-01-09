@@ -17,8 +17,8 @@ class Processor(multiprocessing.Process):
         self.results = results
         self.configuration = configuration
 
-        # Bring down the logger level(s) for boto to prevent log spam during AWS
-        # operations - such as pushing messages to SNS.
+        # Bring down the logger level(s) for boto to prevent log spam during
+        # AWS operations - such as pushing messages to SNS.
         logging.getLogger('boto3').setLevel(logging.WARNING)
         logging.getLogger('botocore').setLevel(logging.WARNING)
 
@@ -30,13 +30,10 @@ class Processor(multiprocessing.Process):
 
     def write(self, payload):
         ''' Implements a helper to write the provided payload to SNS. '''
-        try:
-            self.output.publish(
-                TopicArn=self.configuration['results']['attributes']['topic'],
-                Message=payload
-            )
-        except ClientError as err:
-            raise AttributeError() from err
+        self.output.publish(
+            TopicArn=self.configuration['results']['attributes']['topic'],
+            Message=payload
+        )
 
     def run(self):
         ''' Implements the main runable for the processor. '''
@@ -47,13 +44,15 @@ class Processor(multiprocessing.Process):
             # prior to throwing the exception.
             if self.results.qsize() > 0:
                 self.log.info(
-                    '%s interaction captures in the queue', self.results.qsize()
+                    '%s interaction captures in the queue',
+                    self.results.qsize()
                 )
                 interaction = self.results.get()
-                self.log.info('Attempting to write interaction to SNS')
+                self.log.debug('Attempting to write interaction to SNS')
                 try:
                     self.write(interaction)
-                except AttributeError:
+                except (AttributeError, ClientError):
                     self.log.error('Requeuing interaction, as write failed...')
                     self.results.put(interaction)
                     raise
+                self.log.debug('Interaction written okay')

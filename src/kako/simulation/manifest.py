@@ -51,6 +51,14 @@ SCHEMA = {
             'routes': {
                 'type': 'dict',
                 'schema': {
+                    'patch': {
+                        'type': 'list',
+                        'oneof_schema': [SCHEMA_ROUTING]
+                    },
+                    'put': {
+                        'type': 'list',
+                        'oneof_schema': [SCHEMA_ROUTING]
+                    },
                     'post': {
                         'type': 'list',
                         'oneof_schema': [SCHEMA_ROUTING]

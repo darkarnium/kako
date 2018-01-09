@@ -51,7 +51,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
             timestamp=int(time.time()),
-            capture=self.record,
+            capture=self.record.decode(),
             vulnerability=self.vulnerability,
             node=socket.gethostname(),
             destination_ip='TODO',
@@ -70,7 +70,8 @@ class RequestHandler(socketserver.BaseRequestHandler):
 class Server(socketserver.ThreadingTCPServer):
     ''' Extends SocketServer ThreadingTCPServer to provide configurability. '''
 
-    def __init__(self, server_address, RequestHandlerClass, manifest, configuration, results):
+    def __init__(self, server_address, RequestHandlerClass, manifest,
+                 configuration, results):
         socketserver.ThreadingTCPServer.__init__(
             self, server_address, RequestHandlerClass
         )

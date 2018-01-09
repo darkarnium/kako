@@ -21,11 +21,8 @@ class Capture(object):
         self.simulation_name = simulation_name
         self.destination_port = destination_port
         self.simulation_version = simulation_version
-        self.capture = base64.b64encode(
-            '\r\n'.join(str(x) for x in capture).encode()
-        ).decode()
+        self.capture = base64.b64encode(''.join(capture).encode()).decode()
 
     def toJSON(self):
         ''' Provide a JSON serializer for this Object. '''
         return json.dumps(self.__dict__, sort_keys=True)
-

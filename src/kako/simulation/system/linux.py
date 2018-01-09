@@ -130,7 +130,6 @@ class CommandInterpreter(object):
         process_list.append('  1   root      404     S      init')
         return ''.join(process_list)
 
-
     def handle(self, commands):
         ''' Dispatches the input command to the relevant handler. '''
         # Split commands on semicolon, in the case there are multiple commands

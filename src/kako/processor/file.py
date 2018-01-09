@@ -23,29 +23,28 @@ class Processor(multiprocessing.Process):
 
     def write(self, payload):
         ''' Implements a helper to write the provided payload to file. '''
-        try:
-            with open(self.output, 'a') as hndl:
-                hndl.write(payload)
-                hndl.write('\r\n')
-        except (IOError, PermissionError) as err:
-            raise AttributeError() from err
+        with open(self.output, 'a') as hndl:
+            hndl.write(payload)
+            hndl.write('\r\n')
 
     def run(self):
         ''' Implements the main runable for the processor. '''
         self.log.info('Setting up File results / output processor')
         while True:
             # When there is data in the queue, attempt to pull it and write to
-            # the output file. If something goes awry, requeue the message prior
-            # to throwing the exception.
+            # the output file. If something goes awry, requeue the message
+            # prior to throwing the exception.
             if self.results.qsize() > 0:
                 self.log.info(
-                    '%s interaction captures in the queue', self.results.qsize()
+                    '%s interaction captures in the queue',
+                    self.results.qsize()
                 )
                 interaction = self.results.get()
-                self.log.info('Attempting to write interaction to file')
+                self.log.debug('Attempting to write interaction to file')
                 try:
                     self.write(interaction)
-                except AttributeError:
+                except (AttributeError, IOError, PermissionError):
                     self.log.error('Requeuing interaction, as write failed...')
                     self.results.put(interaction)
                     raise
+                self.log.debug('Interaction written okay')
