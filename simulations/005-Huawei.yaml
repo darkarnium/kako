@@ -23,5 +23,14 @@ server:
   routes:
     options: []
     head: []
-    post: []
+    post:
+      - vulnerability: 'Huawei - DeviceUpgrade_1 remote code execution (CVE-2017-17215)'
+        route: '/ctrlt/DeviceUpgrade_1'
+        response: 
+          code: 200
+          text: 'OK'
+          body: ''
+          headers:
+            - key: 'Content-Type'
+value: 'text/xml'
     get: []
