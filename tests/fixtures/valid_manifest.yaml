@@ -1,0 +1,19 @@
+---
+name: Test Fixture
+port: 7547
+version: 0.2.0
+protocol: http
+server:
+  banner: 'Test Fixture'
+  response:
+    code: 404
+    text: 'Not Found'
+    body: ''
+    headers: []
+  routes:
+    put: []
+    patch: []
+    options: []
+    head: []
+    get: []
+    post: []

@@ -1,0 +1,21 @@
+---
+logging:
+  path: './'
+
+simulations:
+  path: './sample/simulations/'
+
+results:
+  processor: file
+  attributes:
+    path: '/tmp/'
+
+# results:
+#   processor: sns
+#   attributes:
+#     region: 'us-west-2'
+#     topic: 'arn:aws:sns:<region>:<account>:<topic>'
+
+monitoring:
+  enabled: True
+  interval: 60
