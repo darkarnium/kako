@@ -1,0 +1,12 @@
+---
+logging:
+  path: './'
+simulations:
+  path: './sample/simulations/'
+results:
+  processor: file
+  attributes:
+    path: '/tmp/'
+monitoring:
+  enabled: True
+  interval: 60

@@ -1,0 +1,1 @@
+{"capture": "Q0FQVFVSRQ==", "destination_ip": "192.0.2.1", "destination_port": 1234, "node": "NODE", "simulation_name": "SIMULATION", "simulation_version": "0.1.0", "source_ip": "192.0.2.0", "source_port": 1234, "timestamp": 1515543475, "vulnerability": "VULNERABILITY"}

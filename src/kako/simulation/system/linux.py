@@ -126,7 +126,7 @@ class CommandInterpreter(object):
         if args is None:
             args = []
         process_list = []
-        process_list.append('PID   Uid    VmSize    Stat    Command\r\n')
+        process_list.append('PID   Uid    VmSize    Stat    Command\n')
         process_list.append('  1   root      404     S      init')
         return ''.join(process_list)
 
@@ -149,7 +149,7 @@ class CommandInterpreter(object):
                 ref = getattr(self, "do_{0}".format(command))
             except AttributeError:
                 if len(command) >= 1:
-                    output += "sh: {0}: command not found\r\n".format(command)
+                    output += "sh: {0}: command not found\n".format(command)
                 continue
 
             # Call the appropriate handler, and record the output.

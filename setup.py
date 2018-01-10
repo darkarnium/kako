@@ -18,7 +18,7 @@ setup(
         'kako': 'src/kako',
     },
     scripts=[
-        'src/kako.py'
+        'src/kako-master'
     ],
     setup_requires=[
         'pytest-runner',
