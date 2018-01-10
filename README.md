@@ -1,4 +1,4 @@
-![Kako](docs/images/kako.png?raw=true)
+![Kako](https://github.com/darkarnium/kako/raw/master/docs/images/kako.png?raw=true)
 
 This project provides honeypots for a number of well known and deployed embedded device vulnerabilities.
 
@@ -73,14 +73,14 @@ In order to simplify implementation of a new simulation, a number of servers are
 The following servers are currently included:
 
 * Telnet
-  * Accepts any username / password pair for login.
-  * Simulates a `BusyBox` telnet service with basic shell commands.
-  * Records full interaction on disconnect / exit - via `capture()`.
+    * Accepts any username / password pair for login.
+    * Simulates a `BusyBox` telnet service with basic shell commands.
+    * Records full interaction on disconnect / exit - via `capture()`.
 * HTTP
-  * Simulates a `uhttpd` HTTP service with no routes.
-  * Records request on server response - via `capture()`.
+    * Simulates a `uhttpd` HTTP service with no routes.
+    * Records request on server response - via `capture()`.
 * HTTPS
-  * The same as HTTP but has an SSL listener though use of `ssl.wrap_socket()`.
+    * The same as HTTP but has an SSL listener though use of `ssl.wrap_socket()`.
 
 The above servers can also be extended without too much effort to implement required functionality for the given vulnerable service.
 
@@ -114,6 +114,6 @@ The use of AWS SQS / SNS on the back-end allows for easy deployment and aggregat
 ## Additional Reading
 
 * Example and common Kako simulations
-  * https://www.github.com/darkarnium/kako-simulations/
+    * https://www.github.com/darkarnium/kako-simulations/
 * Ogawa project for consuming data from AWS SQS into ElasticSearch.
-  * https://www.github.com/darkarnium/ogawa/
+    * https://www.github.com/darkarnium/ogawa/
