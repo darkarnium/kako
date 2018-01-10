@@ -9,7 +9,7 @@ except ImportError:
 
 setup(
     name='kako',
-    version='1.0',
+    version='1.0.0',
     description='Manifest driven IoT honeypots',
     long_description=LONG_DESCRIPTION,
     author='Peter Adkins',
