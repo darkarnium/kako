@@ -1,9 +1,17 @@
 from setuptools import find_packages, setup, Command
 
+# https://github.com/pypa/pypi-legacy/issues/148
+try:
+    import pypandoc
+    LONG_DESCRIPTION = pypandoc.convert('README.md', 'rst')
+except ImportError:
+    LONG_DESCRIPTION = open('README.md').read()
+
 setup(
     name='kako',
     version='1.0',
     description='Manifest driven IoT honeypots',
+    long_description=LONG_DESCRIPTION,
     author='Peter Adkins',
     author_email='peter.adkins@kernelpicnic.net',
     url='https://www.github.com/darkarnium/kako',
@@ -11,7 +19,7 @@ setup(
     license='MIT',
     download_url='https://github.com/darkarnium/kako/archive/1.0.0.tar.gz',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
     ],
