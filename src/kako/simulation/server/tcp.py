@@ -51,7 +51,7 @@ class RequestHandler(socketserver.BaseRequestHandler):
         ''' Implements 'capture' functionality for identified requests. '''
         msg = messaging.capture.Capture(
             timestamp=int(time.time()),
-            capture=self.record.decode(),
+            capture=self.record.decode(errors='backslashreplace'),
             vulnerability=self.vulnerability,
             node=socket.gethostname(),
             destination_ip='TODO',

@@ -42,12 +42,12 @@ class RequestHandler(tcp.RequestHandler):
                 # Reply to WILL with WON'T.
                 if self.buffer[0] == 251:
                     tcp.RequestHandler.read(self, 1)
-                    self.write(bytearray(255, 252, self.buffer[0]))
+                    self.write(bytearray([255, 252, self.buffer[0]]))
                     continue
                 # Reply to DO with DON'T.
                 if self.buffer[0] == 253:
                     tcp.RequestHandler.read(self, 1)
-                    self.write(bytearray(255, 254, self.buffer[0]))
+                    self.write(bytearray([255, 254, self.buffer[0]]))
                     continue
                 # If IACs sub-negotiation, process it (...by ignoring it)
                 if self.buffer[0] == 250:

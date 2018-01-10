@@ -9,8 +9,9 @@ setup(
     url='https://www.github.com/darkarnium/kako',
     packages=find_packages('src'),
     license='MIT',
+    download_url='https://github.com/darkarnium/kako/archive/1.0.0.tar.gz',
     classifiers=[
-        'Development Status :: 5 - Prouction',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
     ],

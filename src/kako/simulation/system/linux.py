@@ -94,8 +94,19 @@ class CommandInterpreter(object):
             else:
                 decoded_args.append(arg)
 
-        # Return the decoded command.
-        return ' '.join(decoded_args).strip()
+        # Flag for quotes to be stripped, if they're matched.
+        matched_double_quote = False
+        matched_single_quote = False
+        if not ''.join(decoded_args).count('"') % 2:
+            matched_double_quote = True
+        if not ''.join(decoded_args).count("'") % 2:
+            matched_single_quote = True
+
+        # Strip all quotes, if required, and return it.
+        result = ' '.join(decoded_args).strip()
+        result = result.replace('"', '') if matched_double_quote else result
+        result = result.replace("'", '') if matched_single_quote else result
+        return result.strip()
 
     def do_cat(self, args=None):
         ''' Implement expected Mirai files. '''
@@ -126,7 +137,7 @@ class CommandInterpreter(object):
         if args is None:
             args = []
         process_list = []
-        process_list.append('PID   Uid    VmSize    Stat    Command\n')
+        process_list.append('PID   Uid    VmSize    Stat    Command\r\n')
         process_list.append('  1   root      404     S      init')
         return ''.join(process_list)
 
@@ -149,14 +160,14 @@ class CommandInterpreter(object):
                 ref = getattr(self, "do_{0}".format(command))
             except AttributeError:
                 if len(command) >= 1:
-                    output += "sh: {0}: command not found\n".format(command)
+                    output += "sh: {0}: command not found\r\n".format(command)
                 continue
 
             # Call the appropriate handler, and record the output.
             result = ref(arguments)
             if result:
-                output += '{0}\n'.format(result.strip())
+                output += '{0}\r\n'.format(result.strip())
             else:
-                output += '\n'
+                output += '\r\n'
 
         return output
