@@ -19,7 +19,7 @@ setup(
     license='MIT',
     download_url='https://github.com/darkarnium/kako/archive/1.0.0.tar.gz',
     classifiers=[
-        'Development Status :: 5 - Production',
+        'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
     ],
