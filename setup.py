@@ -9,7 +9,7 @@ except ImportError:
 
 setup(
     name='kako',
-    version='1.0.0',
+    version='1.1.0',
     description='Manifest driven IoT honeypots',
     long_description=LONG_DESCRIPTION,
     author='Peter Adkins',
@@ -17,7 +17,7 @@ setup(
     url='https://www.github.com/darkarnium/kako',
     packages=find_packages('src'),
     license='MIT',
-    download_url='https://github.com/darkarnium/kako/archive/1.0.0.tar.gz',
+    download_url='https://github.com/darkarnium/kako/archive/1.1.0.tar.gz',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'License :: OSI Approved :: MIT License',
@@ -37,10 +37,10 @@ setup(
         'pytest-cov',
     ],
     install_requires=[
-        'click==6.6',
-        'boto3==1.4.1',
-        'PyYAML==3.12',
-        'requests==2.11.1',
-        'cerberus==1.0.1',
+        'click==7.0',
+        'boto3==1.10.4',
+        'PyYAML==5.1.2',
+        'requests==2.22.0',
+        'cerberus==1.3.1',
     ]
 )
